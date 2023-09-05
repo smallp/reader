@@ -5,17 +5,6 @@
     <string name="book_mail">BookMall</string>
     <string name="book_shelf">Bookshelf</string>
     <string name="my">Me</string>
-    <string name="type">Type</string>
-    <string name="daily">Daily recommendation</string>
-    <string name="end_book">Finished Edition</string>
-    <string name="rank">Ranking</string>
-
-    <string name="big_hot_title">Hot list</string>
-    <string name="click_title">Click list</string>
-    <string name="recommend_title">Recommendation list</string>
-    <string name="end_title">Finish the list</string>
-    <string name="end_title2">Closing list</string>
-    <string name="hot_search_title">Hot search list</string>
 
     <string name="copy_complete">Copied successfully</string>
     <string name="double_click_exit">Tap again to exit the program</string>
@@ -65,10 +54,6 @@
     <string name="error_load_toc">Failed to load chapters list</string>
     <string name="error_get_data">Failed to get data</string>
     <string name="error_load_msg">Failed to load\n%s</string>
-    <string name="net_error_10001">No network</string>
-    <string name="net_error_10002">Network connection timeout</string>
-    <string name="net_error_10003">Data parsing failed</string>
-    <string name="network_request_failed">Network request failed</string>
     <string name="no_prev_page">No prior page</string>
     <string name="no_next_page">No next page</string>
 
@@ -242,7 +227,7 @@
     <string name="praise">Praise</string>
     <string name="many_book_free">Read a large number of popular novels for free</string>
 
-    <string name="reserved">©2021 LightNovel \n All Right Reserved</string>
+    <string name="reserved">©2021 Small   All Right Reserved</string>
     <string name="about">About Us</string>
     <string name="google_login">Starting Google login</string>
     <string name="buy_vip">Click to open</string>

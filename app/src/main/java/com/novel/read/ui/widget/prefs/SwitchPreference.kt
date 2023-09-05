@@ -21,7 +21,7 @@ class SwitchPreference(context: Context, attrs: AttributeSet) :
         typedArray.recycle()
     }
 
-    override fun onBindViewHolder(holder: PreferenceViewHolder?) {
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
         val v = Preference.bindView<SwitchCompat>(
             context,
             holder,

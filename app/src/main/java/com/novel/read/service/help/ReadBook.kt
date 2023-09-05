@@ -12,15 +12,11 @@ import com.novel.read.help.AppConfig
 import com.novel.read.help.BookHelp
 import com.novel.read.help.IntentDataHelp
 import com.novel.read.help.ReadBookConfig
-import com.novel.read.service.BaseReadAloudService
 import com.novel.read.help.coroutine.Coroutine
+import com.novel.read.service.BaseReadAloudService
 import com.spreada.utils.chinese.ZHConverter
 import io.legado.app.ui.book.read.page.provider.ChapterProvider
 import io.legado.app.ui.book.read.page.provider.ImageProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.jetbrains.anko.getStackTraceString
 import org.jetbrains.anko.toast
 
@@ -95,12 +91,6 @@ object ReadBook {
                     callBack?.upContent()
                 }
                 loadContent(durChapterIndex.plus(1), upContent, false)
-                GlobalScope.launch(Dispatchers.IO) {
-                    for (i in 2..9) {
-                        delay(1000)
-                        download(durChapterIndex + i)
-                    }
-                }
             }
             saveRead()
             callBack?.upView()
@@ -125,12 +115,6 @@ object ReadBook {
                     callBack?.upContent()
                 }
                 loadContent(durChapterIndex.minus(1), upContent, false)
-                GlobalScope.launch(Dispatchers.IO) {
-                    for (i in 2..9) {
-                        delay(1000)
-                        download(durChapterIndex + i)
-                    }
-                }
             }
             saveRead()
             callBack?.upView()
@@ -220,48 +204,12 @@ object ReadBook {
                         BookHelp.getContent(book, chapter)?.let {
                             contentLoadFinish(book, chapter, it, upContent, resetPageOffset)
                             removeLoading(chapter.chapterIndex)
-                        } ?: download(chapter, resetPageOffset = resetPageOffset)
-                    } ?: removeLoading(index)
-                }.onError {
-                    removeLoading(index)
-                }
-            }
-        }
-    }
-
-    private fun download(index: Int) {
-        book?.let { book ->
-            if (book.isLocalBook()) return
-            if (addLoading(index)) {
-                Coroutine.async {
-                    App.db.getChapterDao().getChapter(book.bookId, index)?.let { chapter ->
-                        if (BookHelp.hasContent(book, chapter)) {
-                            removeLoading(chapter.chapterIndex)
-                        } else {
-                            download(chapter, false)
                         }
                     } ?: removeLoading(index)
                 }.onError {
                     removeLoading(index)
                 }
             }
-        }
-    }
-
-    private fun download(chapter: BookChapter, resetPageOffset: Boolean) {
-        val book = book
-        if (book != null) {
-            CacheBook.download(Coroutine.DEFAULT,book, chapter)
-        } else if (book != null) {
-            contentLoadFinish(
-                book,
-                chapter,
-                "没有书源",
-                resetPageOffset = resetPageOffset
-            )
-            removeLoading(chapter.chapterIndex)
-        } else {
-            removeLoading(chapter.chapterIndex)
         }
     }
 
@@ -273,7 +221,7 @@ object ReadBook {
         }
     }
 
-    fun removeLoading(index: Int) {
+    private fun removeLoading(index: Int) {
         synchronized(this) {
             loadingChapters.remove(index)
         }
@@ -342,7 +290,7 @@ object ReadBook {
     /**
      * 内容加载完成
      */
-    fun contentLoadFinish(
+    private fun contentLoadFinish(
         book: Book,
         chapter: BookChapter,
         content: String,
@@ -352,7 +300,8 @@ object ReadBook {
         Coroutine.async {
             if (chapter.chapterIndex in durChapterIndex - 1..durChapterIndex + 1) {
                 chapter.chapterName = when (AppConfig.chineseConverterType) {
-                    1 -> ZHConverter.getInstance(ZHConverter.SIMPLIFIED).convert(chapter.chapterName)
+                    1 -> ZHConverter.getInstance(ZHConverter.SIMPLIFIED)
+                        .convert(chapter.chapterName)
                     2 -> ZHConverter.getInstance(ZHConverter.TRADITIONAL).convert(chapter.chapterName)
                     else -> chapter.chapterName
                 }

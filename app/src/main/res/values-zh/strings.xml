@@ -1,22 +1,11 @@
 <resources>
     <!--App-->
-    <string name="app_name">轻之国度</string>
-    <string name="love_app">喜欢轻之国度?</string>
+    <string name="app_name">三味书屋</string>
+    <string name="love_app">喜欢Small?</string>
 
     <string name="book_mail">书城</string>
     <string name="book_shelf">书架</string>
     <string name="my">我的</string>
-    <string name="type">分类</string>
-    <string name="daily">每日推荐</string>
-    <string name="end_book">完本</string>
-    <string name="rank">排行</string>
-
-    <string name="big_hot_title">大热榜</string>
-    <string name="click_title">点击榜</string>
-    <string name="recommend_title">推荐榜</string>
-    <string name="end_title">完本榜</string>
-    <string name="end_title2">完结榜</string>
-    <string name="hot_search_title">热搜榜</string>
 
     <string name="copy_complete">已拷贝</string>
     <string name="double_click_exit">再按一次退出程序</string>
@@ -64,10 +53,6 @@
     <string name="error_load_toc">加载目录失败</string>
     <string name="error_get_data">获取数据失败！</string>
     <string name="error_load_msg">加载失败\n%s</string>
-    <string name="net_error_10001">没有网络</string>
-    <string name="net_error_10002">网络连接超时</string>
-    <string name="net_error_10003">数据解析失败</string>
-    <string name="network_request_failed">网络请求失败</string>
     <string name="no_prev_page">没有上一页</string>
     <string name="no_next_page">没有下一页</string>
 
@@ -238,12 +223,12 @@
     <string name="theme_setting">主题设置</string>
     <string name="praise">好评</string>
     <string name="many_book_free">海量热门小说免费读</string>
-    <string name="reserved">©2021 轻之国度 \n All Right Reserved</string>
+    <string name="reserved">©2021 Small   All Right Reserved</string>
     <string name="about">关于我们</string>
     <string name="google_login">正在启动谷歌登录</string>
     <string name="buy_vip">点击开通</string>
     <string name="login_now">点击登录</string>
-    <string name="welcome_use">欢迎使用轻之国度</string>
+    <string name="welcome_use">欢迎使用三味书屋</string>
     <string name="g_login">Google账号登录</string>
     <string name="user_login">用户登录</string>
     <string name="privacy">服务条款</string>

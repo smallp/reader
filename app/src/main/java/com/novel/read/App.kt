@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import com.bumptech.glide.Glide
 import com.jeremyliao.liveeventbus.LiveEventBus
-import com.novel.read.constant.AppConst.channelIdDownload
 import com.novel.read.constant.AppConst.channelIdReadAloud
 import com.novel.read.constant.EventBus
 import com.novel.read.data.db.BookDatabase
@@ -23,7 +22,6 @@ import com.novel.read.utils.LanguageUtils
 import com.novel.read.utils.ext.postEvent
 import org.litepal.LitePal
 
-@Suppress("DEPRECATION")
 class App : MultiDexApplication() {
 
     companion object {
@@ -95,17 +93,6 @@ class App : MultiDexApplication() {
     private fun createChannelId() {
         (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.let {
             //用唯一的ID创建渠道对象
-            val downloadChannel = NotificationChannel(
-                channelIdDownload,
-                getString(R.string.action_download),
-                NotificationManager.IMPORTANCE_LOW
-            )
-            //初始化channel
-            downloadChannel.enableLights(false)
-            downloadChannel.enableVibration(false)
-            downloadChannel.setSound(null, null)
-
-            //用唯一的ID创建渠道对象
             val readAloudChannel = NotificationChannel(
                 channelIdReadAloud,
                 getString(R.string.read_aloud),
@@ -117,7 +104,7 @@ class App : MultiDexApplication() {
             readAloudChannel.setSound(null, null)
 
             //向notification manager 提交channel
-            it.createNotificationChannels(listOf(downloadChannel, readAloudChannel))
+            it.createNotificationChannels(listOf(readAloudChannel))
         }
     }
 

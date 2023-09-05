@@ -13,7 +13,10 @@ import androidx.core.view.isVisible
 import androidx.preference.PreferenceViewHolder
 import com.novel.read.R
 import com.novel.read.utils.ColorUtils
-import com.novel.read.utils.ext.*
+import com.novel.read.utils.ext.accentColor
+import com.novel.read.utils.ext.bottomBackground
+import com.novel.read.utils.ext.getPrimaryTextColor
+import com.novel.read.utils.ext.getSecondaryTextColor
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.sdk27.listeners.onLongClick
 import kotlin.math.roundToInt
@@ -104,7 +107,7 @@ class Preference(context: Context, attrs: AttributeSet) :
 
     }
 
-    override fun onBindViewHolder(holder: PreferenceViewHolder?) {
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
         bindView<View>(
             context,
             holder,
@@ -114,7 +117,7 @@ class Preference(context: Context, attrs: AttributeSet) :
             isBottomBackground = isBottomBackground
         )
         super.onBindViewHolder(holder)
-        holder?.itemView?.onLongClick {
+        holder.itemView.onLongClick {
             onLongClick?.invoke()
             true
         }

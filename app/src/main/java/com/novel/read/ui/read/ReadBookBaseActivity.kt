@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
@@ -18,16 +17,12 @@ import com.novel.read.base.VMBaseActivity
 import com.novel.read.constant.PreferKey
 import com.novel.read.data.db.entity.Bookmark
 import com.novel.read.databinding.ActivityReadBookBinding
-import com.novel.read.databinding.DialogDownloadChoiceBinding
 import com.novel.read.help.AppConfig
 import com.novel.read.help.ReadBookConfig
 import com.novel.read.lib.ATH
-import com.novel.read.lib.ThemeStore
 import com.novel.read.lib.dialogs.*
-import com.novel.read.service.help.CacheBook
 import com.novel.read.service.help.ReadBook
 import com.novel.read.utils.ext.applyTint
-import com.novel.read.utils.ext.backgroundColor
 import com.novel.read.utils.ext.getPrefString
 import com.novel.read.utils.ext.requestInputMethod
 
@@ -93,36 +88,13 @@ abstract class ReadBookBaseActivity :
      * 适配刘海
      */
     private fun upLayoutInDisplayCutoutMode() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && AppConfig.readBodyToLh) {
+        if (AppConfig.readBodyToLh) {
             window.attributes = window.attributes.apply {
                 layoutInDisplayCutoutMode =
                     WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
             }
         }
     }
-
-    @SuppressLint("InflateParams")
-    fun showDownloadDialog() {
-        ReadBook.book?.let { book ->
-            alert(titleResource = R.string.offline_cache) {
-                val alertBinding = DialogDownloadChoiceBinding.inflate(layoutInflater).apply {
-                    root.setBackgroundColor(root.context.backgroundColor)
-                    editStart.setText((book.durChapterIndex + 1).toString())
-                    editEnd.setText(book.totalChapterNum.toString())
-                }
-                customView { alertBinding.root }
-                yesButton {
-                    alertBinding.run {
-                        val start = editStart.text?.toString()?.toInt() ?: 0
-                        val end = editEnd.text?.toString()?.toInt() ?: book.totalChapterNum
-                        CacheBook.start(this@ReadBookBaseActivity, book.bookId, start - 1, end - 1)
-                    }
-                }
-                noButton()
-            }.show()
-        }
-    }
-
 
     @SuppressLint("InflateParams")
     fun showBookMark(context: Context) = with(context) {

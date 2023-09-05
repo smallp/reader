@@ -1,24 +1,11 @@
 package com.novel.read.help
 
 import com.novel.read.App
-import com.novel.read.data.db.entity.HttpTTS
-import com.novel.read.utils.ext.*
+import com.novel.read.utils.ext.GSON
+import com.novel.read.utils.ext.fromJsonArray
 import java.io.File
 
 object DefaultData {
-
-    const val httpTtsFileName = "httpTTS.json"
-    const val txtTocRuleFileName = "txtTocRule.json"
-
-    val defaultHttpTTS by lazy {
-        val json =
-            String(
-                App.INSTANCE.assets.open("defaultData${File.separator}$httpTtsFileName")
-                    .readBytes()
-            )
-        GSON.fromJsonArray<HttpTTS>(json)!!
-    }
-
     val defaultReadConfigs by lazy {
         val json = String(
             App.INSTANCE.assets.open("defaultData${File.separator}${ReadBookConfig.configFileName}")

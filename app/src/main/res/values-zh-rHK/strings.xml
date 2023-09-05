@@ -6,17 +6,6 @@
     <string name="book_mail">書城</string>
     <string name="book_shelf">書架</string>
     <string name="my">我的</string>
-    <string name="type">分類</string>
-    <string name="daily">每日推薦</string>
-    <string name="end_book">完本</string>
-    <string name="rank">排行</string>
-
-    <string name="big_hot_title">大熱榜</string>
-    <string name="click_title">點擊榜</string>
-    <string name="recommend_title">推薦榜</string>
-    <string name="end_title">完本榜</string>
-    <string name="end_title2">完結榜</string>
-    <string name="hot_search_title">熱搜榜</string>
 
     <string name="copy_complete">已拷貝</string>
     <string name="double_click_exit">再按一次退出程式</string>
@@ -64,10 +53,6 @@
     <string name="error_load_toc">加載目錄失敗</string>
     <string name="error_get_data">獲取數據失敗！</string>
     <string name="error_load_msg">加載失敗\n%s</string>
-    <string name="net_error_10001">沒有網絡</string>
-    <string name="net_error_10002">網絡連接超時</string>
-    <string name="net_error_10003">數據解析失敗</string>
-    <string name="network_request_failed">網絡請求失敗</string>
     <string name="no_prev_page">沒有上一頁</string>
     <string name="no_next_page">沒有下一頁</string>
 

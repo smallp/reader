@@ -10,7 +10,8 @@ import androidx.preference.PreferenceViewHolder
 import com.novel.read.R
 import com.novel.read.help.AppConfig
 import com.novel.read.utils.ColorUtils
-import com.novel.read.utils.ext.*
+import com.novel.read.utils.ext.accentColor
+import com.novel.read.utils.ext.backgroundColor
 
 
 class PreferenceCategory(context: Context, attrs: AttributeSet) : PreferenceCategory(context, attrs) {
@@ -20,16 +21,16 @@ class PreferenceCategory(context: Context, attrs: AttributeSet) : PreferenceCate
         layoutResource = R.layout.view_preference_category
     }
 
-    override fun onBindViewHolder(holder: PreferenceViewHolder?) {
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-        holder?.let {
+        holder.let {
             val view = it.findViewById(R.id.preference_title)
             if (view is TextView) {  //  && !view.isInEditMode
                 view.text = title
                 if (view.isInEditMode) return
                 view.setBackgroundColor(context.backgroundColor)
                 view.setTextColor(context.accentColor)
-                view.isVisible = title != null && title.isNotEmpty()
+                view.isVisible = !title.isNullOrEmpty()
 
                 val da = it.findViewById(R.id.preference_divider_above)
                 val dividerColor = if (AppConfig.isNightTheme) {

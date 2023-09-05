@@ -3,11 +3,9 @@ package com.novel.read.ui.main.bookshelf
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,11 +25,9 @@ import com.novel.read.lib.ATH
 import com.novel.read.lib.dialogs.alert
 import com.novel.read.lib.dialogs.noButton
 import com.novel.read.lib.dialogs.okButton
-import com.novel.read.ui.MainViewModel
 import com.novel.read.ui.info.BookInfoActivity
 import com.novel.read.ui.main.bookshelf.arrange.ArrangeBookActivity
 import com.novel.read.ui.read.ReadBookActivity
-import com.novel.read.ui.search.SearchActivity
 import com.novel.read.utils.BooksDiffCallBack
 import com.novel.read.utils.ext.*
 import com.novel.read.utils.viewbindingdelegate.viewBinding
@@ -40,8 +36,6 @@ import org.jetbrains.anko.startActivity
 class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_shelf), BaseBookAdapter.CallBack  {
 
     override val viewModel: BookViewModel by viewModels()
-    private val activityViewModel: MainViewModel
-            by activityViewModels()
     private val binding by viewBinding(FragmentBookShelfBinding::bind)
     private lateinit var booksAdapter: BaseBookAdapter
     private var bookshelfLiveData = MutableLiveData<List<Book>>()
@@ -61,7 +55,6 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
     override fun onCompatOptionsItemSelected(item: MenuItem) {
         super.onCompatOptionsItemSelected(item)
         when (item.itemId) {
-            R.id.menu_search -> startActivity<SearchActivity>()
             R.id.menu_update_toc -> {
 //                val group = bookGroups[tab_layout.selectedTabPosition]
 //                val fragment = fragmentMap[group.groupId]
@@ -80,7 +73,6 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
         binding.refreshLayout.setColorSchemeColors(accentColor)
         binding.refreshLayout.setOnRefreshListener {
             binding.refreshLayout.isRefreshing = false
-            activityViewModel.upToc(booksAdapter.data)
         }
 
         val bookshelfLayout = getPrefInt(PreferKey.bookshelfLayout)
@@ -116,7 +108,7 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
         bookshelfLiveData.removeObservers(this)
         bookshelfLiveData.value = App.db.getBookDao().getAllBooks()
 
-        bookshelfLiveData.observe(viewLifecycleOwner, { list ->
+        bookshelfLiveData.observe(viewLifecycleOwner) { list ->
             Log.e("BookFragment", "observeLiveBus: 开始更新")
             booksAdapter.isUseEmpty = list.isEmpty()
             val books = when (getPrefInt(PreferKey.bookshelfSort)) {
@@ -126,7 +118,7 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
             }
 
             booksAdapter.setList(books.toMutableList())
-        })
+        }
 
     }
 
@@ -189,6 +181,6 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
     }
 
     override fun isUpdate(bookId: Long): Boolean {
-        return bookId in activityViewModel.updateList
+        return false
     }
 }

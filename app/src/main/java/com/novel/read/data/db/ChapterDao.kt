@@ -31,7 +31,7 @@ class ChapterDao {
         ).order("chapterIndex desc").find(BookChapter::class.java)
 
     fun getChapterCount(bookId: Long): Int {
-       return  LitePal.where("bookId=?", bookId.toString()).count(BookChapter::class.java)
+       return LitePal.where("bookId=?", bookId.toString()).count(BookChapter::class.java)
     }
 
     fun insert(bookChapters: Array<BookChapter>) {
@@ -43,6 +43,10 @@ class ChapterDao {
             )
         }
         LitePal.saveAll(bookChapters.toList())
+    }
+
+    fun delByBook(bookId: Long) {
+        LitePal.deleteAll(BookChapter::class.java, "bookId=${bookId}")
     }
 
 }

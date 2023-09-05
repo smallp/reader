@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.novel.read">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission
         android:name="android.permission.MANAGE_DOCUMENTS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
     <application
         android:name="com.novel.read.App"
@@ -31,10 +24,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name="com.novel.read.ui.about.AboutActivity"/>
+        <activity android:name="com.novel.read.ui.about.AboutActivity" />
         <activity android:name="com.novel.read.ui.theme.ThemeActivity" />
         <activity android:name="com.novel.read.ui.record.ReadRecordActivity" />
-        <activity android:name="com.novel.read.ui.welcome.WelcomeActivity">
+        <activity
+            android:name="com.novel.read.ui.welcome.WelcomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,29 +42,7 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity android:name="com.novel.read.ui.setting.SettingActivity" />
-        <activity
-            android:name="com.novel.read.ui.feedback.FeedBackActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name="com.novel.read.ui.rank.RankActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name="com.novel.read.ui.end.EndActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name="com.novel.read.ui.daily.DailyActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name="com.novel.read.ui.channel.ChannelInfoActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name="com.novel.read.ui.channel.ChannelActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="behind" />
         <activity android:name="com.novel.read.ui.info.BookInfoActivity" />
-        <activity
-            android:name="com.novel.read.ui.search.SearchActivity"
-            android:launchMode="singleTask" />
         <activity
             android:name="com.novel.read.ui.read.ReadBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
@@ -86,9 +59,7 @@
             android:name="com.novel.read.ui.main.bookshelf.arrange.ArrangeBookActivity"
             android:launchMode="singleTask" />
 
-        <service android:name="com.novel.read.service.CacheBookService" />
         <service android:name="com.novel.read.service.TTSReadAloudService" />
-        <service android:name="com.novel.read.service.HttpReadAloudService" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

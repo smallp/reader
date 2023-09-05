@@ -2,7 +2,6 @@ package com.novel.read.utils
 
 import android.annotation.SuppressLint
 import android.text.TextUtils.isEmpty
-import android.util.Log
 import com.novel.read.App
 import com.novel.read.constant.PreferKey
 import com.novel.read.help.AppConfig
@@ -144,7 +143,7 @@ object StringUtils {
     fun halfToFull(input: String): String {
         val c = input.toCharArray()
         for (i in c.indices) {
-            if (c[i].toInt() == 32)
+            if (c[i].code == 32)
             //半角空格
             {
                 c[i] = 12288.toChar()
@@ -154,9 +153,9 @@ object StringUtils {
             //if (c[i] == 46) //半角点号，不转换
             // continue;
 
-            if (c[i].toInt() in 33..126)
+            if (c[i].code in 33..126)
             //其他符号都转换为全角
-                c[i] = (c[i].toInt() + 65248).toChar()
+                c[i] = (c[i].code + 65248).toChar()
         }
         return String(c)
     }
@@ -165,15 +164,15 @@ object StringUtils {
     fun fullToHalf(input: String): String {
         val c = input.toCharArray()
         for (i in c.indices) {
-            if (c[i].toInt() == 12288)
+            if (c[i].code == 12288)
             //全角空格
             {
                 c[i] = 32.toChar()
                 continue
             }
 
-            if (c[i].toInt() in 65281..65374)
-                c[i] = (c[i].toInt() - 65248).toChar()
+            if (c[i].code in 65281..65374)
+                c[i] = (c[i].code - 65248).toChar()
         }
         return String(c)
     }
@@ -280,10 +279,10 @@ object StringUtils {
         var start = 0
         val len = s.length
         var end = len - 1
-        while (start < end && (s[start].toInt() <= 0x20 || s[start] == '　')) {
+        while (start < end && (s[start].code <= 0x20 || s[start] == '　')) {
             ++start
         }
-        while (start < end && (s[end].toInt() <= 0x20 || s[end] == '　')) {
+        while (start < end && (s[end].code <= 0x20 || s[end] == '　')) {
             --end
         }
         if (end < len) ++end

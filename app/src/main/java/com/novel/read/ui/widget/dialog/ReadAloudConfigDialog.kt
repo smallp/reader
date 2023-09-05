@@ -17,7 +17,10 @@ import com.novel.read.constant.PreferKey
 import com.novel.read.lib.ATH
 import com.novel.read.service.BaseReadAloudService
 import com.novel.read.service.help.ReadAloud
-import com.novel.read.utils.ext.*
+import com.novel.read.utils.ext.backgroundColor
+import com.novel.read.utils.ext.getPrefLong
+import com.novel.read.utils.ext.getSize
+import com.novel.read.utils.ext.postEvent
 
 class ReadAloudConfigDialog : DialogFragment() {
     private val readAloudPreferTag = "readAloudPreferTag"
@@ -78,20 +81,12 @@ class ReadAloudConfigDialog : DialogFragment() {
 
         override fun onResume() {
             super.onResume()
-            preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+            preferenceManager.sharedPreferences!!.registerOnSharedPreferenceChangeListener(this)
         }
 
         override fun onPause() {
-            preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+            preferenceManager.sharedPreferences!!.unregisterOnSharedPreferenceChangeListener(this)
             super.onPause()
-        }
-
-        override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-            when (preference?.key) {
-//                PreferKey.speakEngine ->
-//                    SpeakEngineDialog().show(childFragmentManager, "speakEngine")
-            }
-            return super.onPreferenceTreeClick(preference)
         }
 
         override fun onSharedPreferenceChanged(

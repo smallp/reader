@@ -1,34 +1,23 @@
 package com.novel.read.utils
 
-import retrofit2.Response
-import java.net.InetAddress
-import java.net.NetworkInterface
-import java.net.SocketException
 import java.net.URL
 import java.util.*
-import java.util.regex.Pattern
 
 @Suppress("unused")
 object NetworkUtils {
-    fun getUrl(response: Response<*>): String {
-        val networkResponse = response.raw().networkResponse()
-        return networkResponse?.request()?.url()?.toString()
-            ?: response.raw().request().url().toString()
-    }
-
     private val notNeedEncoding: BitSet by lazy {
         val bitSet = BitSet(256)
-        for (i in 'a'.toInt()..'z'.toInt()) {
+        for (i in 'a'.code..'z'.code) {
             bitSet.set(i)
         }
-        for (i in 'A'.toInt()..'Z'.toInt()) {
+        for (i in 'A'.code..'Z'.code) {
             bitSet.set(i)
         }
-        for (i in '0'.toInt()..'9'.toInt()) {
+        for (i in '0'.code..'9'.code) {
             bitSet.set(i)
         }
         for (char in "+-_.$:()!*@&#,[]") {
-            bitSet.set(char.toInt())
+            bitSet.set(char.code)
         }
         return@lazy bitSet
     }
@@ -44,7 +33,7 @@ object NetworkUtils {
         var i = 0
         while (i < str.length) {
             val c = str[i]
-            if (notNeedEncoding.get(c.toInt())) {
+            if (notNeedEncoding.get(c.code)) {
                 i++
                 continue
             }
@@ -89,67 +78,4 @@ object NetworkUtils {
         }
         return relativeUrl
     }
-
-    fun getBaseUrl(url: String?): String? {
-        if (url == null || !url.startsWith("http")) return null
-        val index = url.indexOf("/", 9)
-        return if (index == -1) {
-            url
-        } else url.substring(0, index)
-    }
-
-   fun getSubDomain(url: String?): String {
-        var baseUrl = getBaseUrl(url)
-        if (baseUrl == null) return ""
-        return if (baseUrl.indexOf(".") == baseUrl.lastIndexOf(".")) {
-            baseUrl.substring(baseUrl.lastIndexOf("/")+1)
-        } else baseUrl.substring(baseUrl.indexOf(".")+1)
-    }
-    
-    /**
-     * Get local Ip address.
-     */
-    fun getLocalIPAddress(): InetAddress? {
-        var enumeration: Enumeration<NetworkInterface>? = null
-        try {
-            enumeration = NetworkInterface.getNetworkInterfaces()
-        } catch (e: SocketException) {
-            e.printStackTrace()
-        }
-
-        if (enumeration != null) {
-            while (enumeration.hasMoreElements()) {
-                val nif = enumeration.nextElement()
-                val addresses = nif.inetAddresses
-                if (addresses != null) {
-                    while (addresses.hasMoreElements()) {
-                        val address = addresses.nextElement()
-                        if (!address.isLoopbackAddress && isIPv4Address(address.hostAddress)) {
-                            return address
-                        }
-                    }
-                }
-            }
-        }
-        return null
-    }
-
-    /**
-     * Check if valid IPV4 address.
-     *
-     * @param input the address string to check for validity.
-     * @return True if the input parameter is a valid IPv4 address.
-     */
-    fun isIPv4Address(input: String): Boolean {
-        return IPV4_PATTERN.matcher(input).matches()
-    }
-
-    /**
-     * Ipv4 address check.
-     */
-    private val IPV4_PATTERN = Pattern.compile(
-        "^(" + "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}" +
-                "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
-    )
-
 }

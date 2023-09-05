@@ -4,25 +4,14 @@ import android.content.Context
 import android.content.Intent
 import com.novel.read.App
 import com.novel.read.constant.IntentAction
-import com.novel.read.constant.PreferKey
-import com.novel.read.data.db.entity.HttpTTS
 import com.novel.read.service.BaseReadAloudService
-import com.novel.read.service.HttpReadAloudService
 import com.novel.read.service.TTSReadAloudService
-import com.novel.read.utils.ext.*
 
 object ReadAloud {
     private var aloudClass: Class<*> = getReadAloudClass()
-    var httpTTS: HttpTTS? = null
 
     private fun getReadAloudClass(): Class<*> {
-        val spId = App.INSTANCE.getPrefLong(PreferKey.speakEngine)
-//        httpTTS = App.db.httpTTSDao().get(spId)
-        return if (httpTTS != null) {
-            HttpReadAloudService::class.java
-        } else {
-            TTSReadAloudService::class.java
-        }
+        return TTSReadAloudService::class.java
     }
 
     fun upReadAloudClass() {

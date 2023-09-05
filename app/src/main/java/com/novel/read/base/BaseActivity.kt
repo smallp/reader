@@ -14,12 +14,16 @@ import androidx.viewbinding.ViewBinding
 import com.novel.read.R
 import com.novel.read.constant.AppConst
 import com.novel.read.constant.Theme
-import com.novel.read.lib.*
+import com.novel.read.lib.ATH
 import com.novel.read.ui.widget.TitleBar
 import com.novel.read.utils.ColorUtils
 import com.novel.read.utils.LanguageUtils
+import com.novel.read.utils.ext.applyOpenTint
+import com.novel.read.utils.ext.applyTint
+import com.novel.read.utils.ext.backgroundColor
 import com.novel.read.utils.ext.disableAutoFill
-import com.novel.read.utils.ext.*
+import com.novel.read.utils.ext.hideSoftInput
+import com.novel.read.utils.ext.primaryColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -75,12 +79,12 @@ abstract class BaseActivity<VB : ViewBinding>(
         observeLiveBus()
     }
 
-    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration?) {
-        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
-        findViewById<TitleBar>(R.id.title_bar)
-            ?.onMultiWindowModeChanged(isInMultiWindowMode, fullScreen)
-        setupSystemBar()
-    }
+//    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration?) {
+//        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
+//        findViewById<TitleBar>(R.id.title_bar)
+//            ?.onMultiWindowModeChanged(isInMultiWindowMode, fullScreen)
+//        setupSystemBar()
+//    }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)

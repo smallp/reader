@@ -9,7 +9,6 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.novel.read.R
 import com.novel.read.base.VMBaseActivity
-import com.novel.read.constant.AppConst
 import com.novel.read.constant.EventBus
 import com.novel.read.constant.IntentAction
 import com.novel.read.data.db.entity.Book
@@ -79,19 +78,6 @@ class BookInfoActivity : VMBaseActivity<ActivityBookInfoBinding,BookInfoViewMode
         }
         viewModel.bookListResp.observe(this) {
             adapter.setList(it)
-        }
-        viewModel.status.observe(this) {
-            when (it) {
-                AppConst.loading -> {
-                    binding.refresh.showLoading()
-                }
-                AppConst.complete -> {
-                    binding.refresh.showFinish()
-                }
-                else -> {
-                    binding.refresh.showError()
-                }
-            }
         }
     }
 

@@ -7,7 +7,8 @@ import androidx.preference.ListPreference
 import androidx.preference.PreferenceViewHolder
 import com.novel.read.R
 import com.novel.read.utils.ColorUtils
-import com.novel.read.utils.ext.*
+import com.novel.read.utils.ext.bottomBackground
+import com.novel.read.utils.ext.getPrimaryTextColor
 
 
 class NameListPreference(context: Context, attrs: AttributeSet) : ListPreference(context, attrs) {
@@ -22,7 +23,7 @@ class NameListPreference(context: Context, attrs: AttributeSet) : ListPreference
         typedArray.recycle()
     }
 
-    override fun onBindViewHolder(holder: PreferenceViewHolder?) {
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
         val v = Preference.bindView<TextView>(
             context,
             holder,

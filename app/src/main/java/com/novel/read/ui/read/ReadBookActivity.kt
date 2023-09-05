@@ -124,7 +124,6 @@ class ReadBookActivity :ReadBookBaseActivity(),
                     viewModel.refreshContent(it)
                 }
             }
-            R.id.menu_download -> showDownloadDialog()
             R.id.menu_add_bookmark -> showBookMark(this)
             R.id.menu_copy_text ->
                 TextDialog.show(supportFragmentManager, ReadBook.curTextChapter?.getContent())

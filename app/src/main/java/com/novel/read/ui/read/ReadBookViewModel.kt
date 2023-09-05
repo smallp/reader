@@ -4,19 +4,16 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import com.novel.read.App
-import com.novel.read.R
 import com.novel.read.base.BaseViewModel
 import com.novel.read.data.db.entity.Book
 import com.novel.read.data.db.entity.BookChapter
 import com.novel.read.help.BookHelp
 import com.novel.read.help.IntentDataHelp
-import com.novel.read.network.repository.BookRepository
 import com.novel.read.service.BaseReadAloudService
 import com.novel.read.service.help.ReadAloud
 import com.novel.read.service.help.ReadBook
 
 class ReadBookViewModel(application: Application) : BaseViewModel(application) {
-    private val bookRepository by lazy { BookRepository() }
     var isInitFinish = false
     var searchContentQuery = ""
 
@@ -82,9 +79,9 @@ class ReadBookViewModel(application: Application) : BaseViewModel(application) {
     ) {
         Log.e("loadChapterList", "loadChapterList: ")
         if (book.isLocalBook()) {
-//            execute {
+            execute {
 //                LocalBook.getChapterList(book).let {
-//                    App.db.getChapterDao().delByBook(book.bookUrl)
+//                    App.db.getChapterDao().delByBook(book.bookId)
 //                    App.db.getChapterDao().insert(*it.toTypedArray())
 //                    App.db.getBookDao().update(book)
 //                    ReadBook.chapterSize = it.size
@@ -95,46 +92,9 @@ class ReadBookViewModel(application: Application) : BaseViewModel(application) {
 //                        ReadBook.loadContent(resetPageOffset = true)
 //                    }
 //                }
-//            }.onError {
-//                ReadBook.upMsg("LoadTocError:${it.localizedMessage}")
-//            }
-        } else {
-            launch(
-                block = {
-                    val bookChapters = bookRepository.getDirectory(book.bookId).chapterList
-
-                    val cList = arrayListOf<BookChapter>()
-                    for (chapter in bookChapters!!) {
-                        val bookChapter = BookChapter(
-                            bookId = chapter.bookId,
-                            chapterId = chapter.chapterId,
-                            chapterIndex = chapter.chapterIndex - 1,
-                            chapterName =  chapter.chapterName,
-                            createTimeValue = chapter.createTime,
-                            updateDate = "",
-                            updateTimeValue = 0L,
-                            chapterUrl = chapter.chapterUrl
-                        )
-                        cList.add(bookChapter)
-                    }
-                    if (cList.isNotEmpty()) {
-                        if (changeDruChapterIndex == null) {
-                            App.db.getChapterDao().insert(cList.toTypedArray())
-                            book.totalChapterNum = cList.size
-                            App.db.getBookDao().update(book)
-                            ReadBook.chapterSize = cList.size
-                            ReadBook.upMsg(null)
-                            ReadBook.loadContent(resetPageOffset = true)
-                        } else {
-                            changeDruChapterIndex(cList)
-                        }
-                    } else {
-                        ReadBook.upMsg(context.getString(R.string.error_load_toc))
-                    }
-                },error = {
-                    ReadBook.upMsg(context.getString(R.string.error_load_toc))
-                }
-            )
+            }.onError {
+                ReadBook.upMsg("LoadTocError:${it.localizedMessage}")
+            }
         }
     }
 
