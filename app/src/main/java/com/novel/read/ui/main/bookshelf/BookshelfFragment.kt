@@ -5,8 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
+import android.os.Environment
 import android.provider.OpenableColumns
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,8 +21,10 @@ import com.novel.read.constant.EventBus
 import com.novel.read.constant.IntentAction
 import com.novel.read.constant.PreferKey
 import com.novel.read.data.db.entity.Book
+import com.novel.read.data.db.entity.BookChapter
 import com.novel.read.databinding.DialogBookshelfConfigBinding
 import com.novel.read.databinding.FragmentBookShelfBinding
+import com.novel.read.help.BookHelp
 import com.novel.read.help.IntentDataHelp
 import com.novel.read.lib.ATH
 import com.novel.read.lib.dialogs.alert
@@ -33,7 +35,16 @@ import com.novel.read.ui.read.ReadBookActivity
 import com.novel.read.utils.BooksDiffCallBack
 import com.novel.read.utils.ext.*
 import com.novel.read.utils.viewbindingdelegate.viewBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.startActivity
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStreamReader
+import java.time.Instant
 
 
 class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_shelf), BaseBookAdapter.CallBack  {
@@ -83,7 +94,7 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
         booksAdapter.setEmptyView(R.layout.view_empty)
         booksAdapter.setDiffCallback(BooksDiffCallBack())
 
-        booksAdapter.setOnItemClickListener { adapter, view, position ->
+        booksAdapter.setOnItemClickListener { adapter, _, position ->
             selectBook = adapter.data[position] as Book
             activity?.startActivity<ReadBookActivity>(
                 Pair(IntentAction.bookId, selectBook.bookId),
@@ -99,10 +110,8 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
         bookshelfLiveData.value = App.db.getBookDao().getAllBooks()
 
         bookshelfLiveData.observe(viewLifecycleOwner) { list ->
-            Log.e("BookFragment", "observeLiveBus: 开始更新")
             booksAdapter.isUseEmpty = list.isEmpty()
             val books = when (getPrefInt(PreferKey.bookshelfSort)) {
-                1 -> list.sortedByDescending { it.lastUpdateChapterDate }
                 2 -> list.sortedBy { it.bookName }
                 else -> list.sortedByDescending { it.durChapterTime }
             }
@@ -112,11 +121,10 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
 
     }
 
-    fun addBook() {
+    private fun addBook() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "text/plain"
-            //putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
         }
 
         startActivityForResult(intent, 100)
@@ -135,7 +143,7 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
                 val cursor: Cursor? = contentResolver.query(
                     uri, null, null, null, null, null
                 )
-
+                var displayName = "unknown"
                 cursor?.use {
                     // moveToFirst() returns false if the cursor has 0 rows. Very handy for
                     // "if there's anything to look at, look at it" conditionals.
@@ -143,15 +151,77 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
 
                         // Note it's called "Display Name". This is
                         // provider-specific, and might not necessarily be the file name.
-                        val displayName: String =
+                        displayName =
                             it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                        val sizeIndex: Int = it.getColumnIndex(OpenableColumns.SIZE)
-                        Log.d("small", "$displayName ${sizeIndex}")
                     }
                 }
-
+                launch {
+                    val target = File(
+                        requireContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS),
+                        displayName
+                    )
+                    withContext(Dispatchers.IO) {
+                        val ws = FileOutputStream(target)
+                        contentResolver.openInputStream(uri)?.use {
+                            val bf = ByteArray(4 * 1024)
+                            var bs: Int
+                            while (true) {
+                                bs = it.read(bf)
+                                if (bs <= 0) break
+                                ws.write(bf, 0, bs)
+                            }
+                        }
+                        ws.close()
+                    }
+                    saveBook(displayName)
+                }
             }
         }
+    }
+
+    private suspend fun saveBook(name: String) {
+        val book = Book(Instant.now().epochSecond, name.split(".")[0], originName = name)
+        withContext(Dispatchers.IO) {
+            val target = File(
+                requireContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS),
+                name
+            )
+            BufferedReader(InputStreamReader(FileInputStream(target))).use {
+                var start: Long = 0
+                var index = 0
+                var title = it.readLine() ?: return@withContext
+                var end: Long = title.toByteArray().size.toLong()
+                val chapters = ArrayList<BookChapter>()
+                val patten = BookHelp.findTitlePattern(title) ?: return@withContext
+                while (true) {
+                    val line = it.readLine()
+                    if (line == null) {
+                        chapters.add(BookChapter(0, book.bookId, index, title, start, end))
+                        break
+                    }
+                    val first = line.trim().let { s ->
+                        if (s.length > 1 && !s.endsWith("结束")) s[0]
+                        else ""
+                    }
+                    if ((first == '第' || (first in '0'..'9')) && patten.matcher(line).find()) {
+                        chapters.add(BookChapter(0, book.bookId, index++, title, start, end))
+                        start = end
+                        title = line
+                    }
+                    end += line.toByteArray().size.toLong() + 1
+                }
+                App.db.getChapterDao().insert(chapters)
+                book.totalChapterNum = chapters.size
+            }
+        }
+        if (book.totalChapterNum == 0) {
+            toast("章节不符合规范，GG。")
+            return
+        } else {
+            toast("文件导入完成！")
+        }
+        App.db.getBookDao().saveBook(book)
+        upRecyclerData()
     }
 
     @SuppressLint("InflateParams")

@@ -7,7 +7,6 @@ data class BookChapter(
     val bookId: Long,
     val chapterIndex: Int,
     var chapterName: String,
-    val createTimeValue: Long,
     val from: Long,
     val to: Long,
 ) : LitePalSupport()

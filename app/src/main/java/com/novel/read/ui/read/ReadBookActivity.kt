@@ -116,19 +116,9 @@ class ReadBookActivity :ReadBookBaseActivity(),
      */
     override fun onCompatOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_refresh -> {
-                ReadBook.book?.let {
-                    ReadBook.curTextChapter = null
-                    binding.pageView.upContent()
-                    viewModel.refreshContent(it)
-                }
-            }
             R.id.menu_add_bookmark -> showBookMark(this)
             R.id.menu_copy_text ->
                 TextDialog.show(supportFragmentManager, ReadBook.curTextChapter?.getContent())
-            R.id.menu_update_toc -> ReadBook.book?.let {
-                loadChapterList(it)
-            }
             R.id.menu_page_anim -> showPageAnimConfig {
                 binding.pageView.upPageAnim()
             }

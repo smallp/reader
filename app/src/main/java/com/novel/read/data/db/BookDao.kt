@@ -14,12 +14,6 @@ class BookDao {
     fun update(book: Book) {
         val values = ContentValues()
         values.put("bookName", book.bookName)
-        values.put("bookStatus", book.bookStatus)
-        values.put("categoryName", book.categoryName)
-        values.put("channelName", book.channelName)
-        values.put("cName", book.cName)
-        values.put("lastUpdateChapterDate", book.lastUpdateChapterDate)
-        values.put("status", book.status)
         values.put("durChapterTime", book.durChapterTime)
         values.put("durChapterIndex", book.durChapterIndex)
         values.put("durChapterPos", book.durChapterPos)
@@ -36,10 +30,9 @@ class BookDao {
     fun delete(book: Book): Int =
         LitePal.deleteAll(Book::class.java, "bookId=?", book.bookId.toString())
 
-    fun saveBook(book: List<Book>?) {
-        if (book != null && book.isNotEmpty()) {
-            LitePal.saveAll(book)
-        }
+    fun saveBook(book: Book) {
+        LitePal.deleteAll(Book::class.java, "bookName=?", book.bookName)
+        LitePal.saveAll(listOf(book))
     }
 
 }

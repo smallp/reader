@@ -1,6 +1,5 @@
 package com.novel.read.utils
 
-import android.os.Environment
 import android.webkit.MimeTypeMap
 import androidx.annotation.IntDef
 import com.novel.read.App
@@ -10,7 +9,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
-@Suppress("unused")
 object FileUtils {
 
     fun exists(root: File, vararg subDirFiles: String): Boolean {
@@ -27,7 +25,7 @@ object FileUtils {
         return createFolderIfNotExist(filePath)
     }
 
-    fun createFolderIfNotExist(filePath: String): File {
+    private fun createFolderIfNotExist(filePath: String): File {
         val file = File(filePath)
         //如果文件夹不存在，就创建它
         if (!file.exists()) {
@@ -50,23 +48,6 @@ object FileUtils {
             }
         } catch (e: IOException) {
             e.printStackTrace()
-        }
-        return file
-    }
-
-    fun createFileWithReplace(filePath: String) : File{
-        val file = File(filePath)
-        if (!file.exists()) {
-            //创建父类文件夹
-            file.parent?.let {
-                createFolderIfNotExist(it)
-            }
-            //创建文件
-            file.createNewFile()
-        }
-        else{
-            file.delete()
-            file.createNewFile()
         }
         return file
     }
@@ -103,20 +84,9 @@ object FileUtils {
         file.delete()
     }
 
-    fun getCachePath(): String {
-        return App.INSTANCE.externalCacheDir?.absolutePath
-            ?: App.INSTANCE.cacheDir.absolutePath
-    }
-
-    fun getSdCardPath(): String {
-        @Suppress("DEPRECATION")
-        var sdCardDirectory = Environment.getExternalStorageDirectory().absolutePath
-        try {
-            sdCardDirectory = File(sdCardDirectory).canonicalPath
-        } catch (ioe: IOException) {
-            ioe.printStackTrace()
-        }
-        return sdCardDirectory
+    fun getCachePath(): File {
+        return App.INSTANCE.externalCacheDir
+            ?: App.INSTANCE.cacheDir
     }
 
     const val BY_NAME_ASC = 0
@@ -145,7 +115,7 @@ object FileUtils {
         return path1
     }
 
-    fun closeSilently(c: Closeable?) {
+    private fun closeSilently(c: Closeable?) {
         if (c == null) {
             return
         }
@@ -209,31 +179,6 @@ object FileUtils {
             }
         }
         return dirList.toTypedArray()
-    }
-
-    /**
-     * 列出指定目录下的所有子目录及所有文件
-     */
-    @JvmOverloads
-    fun listDirsAndFiles(
-        startDirPath: String,
-        allowExtensions: Array<String>? = null
-    ): Array<File?>? {
-        val dirs: Array<File?>?
-        val files: Array<File?>? = if (allowExtensions == null) {
-            listFiles(startDirPath)
-        } else {
-            listFiles(startDirPath, allowExtensions)
-        }
-        val dirsAndFiles: Array<File?>
-        dirs = listDirs(startDirPath)
-        if (files == null) {
-            return null
-        }
-        dirsAndFiles = arrayOfNulls(dirs.size + files.size)
-        System.arraycopy(dirs, 0, dirsAndFiles, 0, dirs.size)
-        System.arraycopy(files, 0, dirsAndFiles, dirs.size, files.size)
-        return dirsAndFiles
     }
 
     /**
@@ -309,14 +254,6 @@ object FileUtils {
             listFiles(startDirPath, allowExtension = null)
         else
             listFiles(startDirPath, arrayOf(allowExtension))
-    }
-
-    /**
-     * 判断文件或目录是否存在
-     */
-    fun exist(path: String): Boolean {
-        val file = File(path)
-        return file.exists()
     }
 
     /**

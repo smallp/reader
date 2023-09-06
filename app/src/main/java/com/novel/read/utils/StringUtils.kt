@@ -2,10 +2,6 @@ package com.novel.read.utils
 
 import android.annotation.SuppressLint
 import android.text.TextUtils.isEmpty
-import com.novel.read.App
-import com.novel.read.constant.PreferKey
-import com.novel.read.utils.ext.getPrefInt
-import com.novel.read.utils.ext.getPrefLong
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -104,17 +100,6 @@ object StringUtils {
         }
 
         return ""
-    }
-
-    fun checkInstallTime(): Boolean {
-        val installTime = App.INSTANCE.getPrefLong(PreferKey.installTime)
-        val currentTime = System.currentTimeMillis()
-        //如果当前时间比安装时间早7天 并且 安装包开启次数大于7
-        return currentTime - installTime > 7 * 24 * 3600 * 1000 && App.INSTANCE.getPrefInt(
-            PreferKey.installCount,
-            0
-        ) > 7
-
     }
 
     fun toSize(length: Long): String {

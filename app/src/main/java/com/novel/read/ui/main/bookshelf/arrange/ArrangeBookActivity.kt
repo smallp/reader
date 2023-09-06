@@ -1,7 +1,6 @@
 package com.novel.read.ui.main.bookshelf.arrange
 
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.novel.read.App
 import com.novel.read.R
@@ -45,17 +44,15 @@ class ArrangeBookActivity : VMBaseActivity<ActivityArrangeBookBinding,ArrangeBoo
         viewModel.booksLiveData.removeObservers(this)
         viewModel.booksLiveData.value = App.db.getBookDao().getAllBooks()
 
-        viewModel.booksLiveData.observe(this, { list ->
-            Log.e("ArrangeBookActivity", "observeLiveBus: 开始更新")
+        viewModel.booksLiveData.observe(this) { list ->
             adapter.isUseEmpty = list.isEmpty()
             val books = when (getPrefInt(PreferKey.bookshelfSort)) {
-                1 -> list.sortedByDescending { it.lastUpdateChapterDate }
                 2 -> list.sortedBy { it.bookName }
                 else -> list.sortedByDescending { it.durChapterTime }
             }
 
             adapter.setList(books.toMutableList())
-        })
+        }
     }
 
     override fun upSelectCount() {

@@ -124,9 +124,9 @@ class ChapterListFragment : VMBaseFragment<ChapterListViewModel>(R.layout.fragme
         } else {
             tocLiveData?.removeObservers(this)
             tocLiveData?.value = App.db.getChapterDao().liveDataSearch(viewModel.bookId, newText)
-            tocLiveData?.observe(viewLifecycleOwner, {
+            tocLiveData?.observe(viewLifecycleOwner) {
                 adapter.setList(it)
-            })
+            }
         }
     }
 

@@ -34,15 +34,11 @@ class ChapterDao {
        return LitePal.where("bookId=?", bookId.toString()).count(BookChapter::class.java)
     }
 
-    fun insert(bookChapters: Array<BookChapter>) {
+    fun insert(bookChapters: List<BookChapter>) {
         if (bookChapters.isNotEmpty()) {
-            LitePal.deleteAll(
-                BookChapter::class.java,
-                "bookId=?",
-                bookChapters[0].bookId.toString()
-            )
+            delByBook(bookChapters[0].bookId)
+            LitePal.saveAll(bookChapters)
         }
-        LitePal.saveAll(bookChapters.toList())
     }
 
     fun delByBook(bookId: Long) {

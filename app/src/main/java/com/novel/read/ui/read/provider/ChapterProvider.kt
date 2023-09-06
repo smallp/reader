@@ -16,6 +16,7 @@ import com.novel.read.data.read.TextLine
 import com.novel.read.data.read.TextPage
 import com.novel.read.help.AppConfig
 import com.novel.read.help.ReadBookConfig
+import com.novel.read.ui.read.provider.ImageProvider
 import com.novel.read.utils.NetworkUtils
 import com.novel.read.utils.RealPathUtil
 import com.novel.read.utils.ext.*

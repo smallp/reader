@@ -30,8 +30,7 @@ class BooksDiffCallBack : DiffUtil.ItemCallback<Book>() {
         oldItem: Book,
         newItem: Book
     ): Boolean {
-        return (oldItem.bookName.equals(newItem.bookName)
-                && oldItem.lastUpdateChapterDate.equals(newItem.lastUpdateChapterDate))
+        return (oldItem.bookName.equals(newItem.bookName))
     }
 
     /**
@@ -53,11 +52,6 @@ class BooksDiffCallBack : DiffUtil.ItemCallback<Book>() {
         }
         if (oldItem.durChapterTitle != newItem.durChapterTitle) {
             bundle.putString("dur", newItem.durChapterTitle)
-        }
-        if (oldItem.lastUpdateChapterDate != newItem.lastUpdateChapterDate
-            || oldItem.durChapterTime != newItem.durChapterTime
-        ) {
-            bundle.putBoolean("refresh", true)
         }
         if (bundle.isEmpty) return null
         return bundle

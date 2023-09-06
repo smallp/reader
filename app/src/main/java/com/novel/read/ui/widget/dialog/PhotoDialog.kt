@@ -9,8 +9,8 @@ import com.novel.read.R
 import com.novel.read.base.BaseDialogFragment
 import com.novel.read.databinding.DialogPhotoViewBinding
 import com.novel.read.service.help.ReadBook
+import com.novel.read.ui.read.provider.ImageProvider
 import com.novel.read.utils.viewbindingdelegate.viewBinding
-import io.legado.app.ui.book.read.page.provider.ImageProvider
 
 class PhotoDialog : BaseDialogFragment() {
 

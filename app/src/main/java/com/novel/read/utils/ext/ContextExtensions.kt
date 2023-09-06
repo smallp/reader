@@ -9,6 +9,7 @@ import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.BatteryManager
+import android.os.Environment
 import android.provider.Settings
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -147,7 +148,7 @@ val Context.sysBattery: Int
     }
 
 val Context.externalFilesDir: File
-    get() = this.getExternalFilesDir(null) ?: this.filesDir
+    get() = this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) ?: this.filesDir
 
 val Context.eCacheDir: File
     get() = this.externalCacheDir ?: this.cacheDir

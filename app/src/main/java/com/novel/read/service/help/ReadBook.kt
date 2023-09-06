@@ -2,7 +2,6 @@ package com.novel.read.service.help
 
 import androidx.lifecycle.MutableLiveData
 import com.novel.read.App
-import com.novel.read.constant.BookType
 import com.novel.read.data.db.entity.Book
 import com.novel.read.data.db.entity.BookChapter
 import com.novel.read.data.db.entity.ReadRecord
@@ -13,8 +12,8 @@ import com.novel.read.help.IntentDataHelp
 import com.novel.read.help.ReadBookConfig
 import com.novel.read.help.coroutine.Coroutine
 import com.novel.read.service.BaseReadAloudService
+import com.novel.read.ui.read.provider.ImageProvider
 import io.legado.app.ui.book.read.page.provider.ChapterProvider
-import io.legado.app.ui.book.read.page.provider.ImageProvider
 import org.jetbrains.anko.getStackTraceString
 import org.jetbrains.anko.toast
 
@@ -25,7 +24,6 @@ object ReadBook {
     var chapterSize = 0
     var durChapterIndex = 0
     var durPageIndex = 0
-    var isLocalBook = true
     var callBack: CallBack? = null
     var prevTextChapter: TextChapter? = null
     var curTextChapter: TextChapter? = null
@@ -41,7 +39,6 @@ object ReadBook {
         readRecord.readTime = App.db.getReadRecordDao().getReadTime(book.bookName) ?: 0
         durChapterIndex = book.durChapterIndex
         durPageIndex = book.durChapterPos
-        isLocalBook = book.origin == BookType.local
         chapterSize = 0
         prevTextChapter = null
         curTextChapter = null
@@ -196,32 +193,13 @@ object ReadBook {
 
     fun loadContent(index: Int, upContent: Boolean = true, resetPageOffset: Boolean) {
         book?.let { book ->
-            if (addLoading(index)) {
-                Coroutine.async {
-                    App.db.getChapterDao().getChapter(book.bookId, index)?.let { chapter ->
-                        BookHelp.getContent(book, chapter)?.let {
-                            contentLoadFinish(book, chapter, it, upContent, resetPageOffset)
-                            removeLoading(chapter.chapterIndex)
-                        }
-                    } ?: removeLoading(index)
-                }.onError {
-                    removeLoading(index)
+            Coroutine.async {
+                App.db.getChapterDao().getChapter(book.bookId, index)?.let { chapter ->
+                    BookHelp.getContent(book, chapter)?.let {
+                        contentLoadFinish(book, chapter, it, upContent, resetPageOffset)
+                    }
                 }
             }
-        }
-    }
-
-    private fun addLoading(index: Int): Boolean {
-        synchronized(this) {
-            if (loadingChapters.contains(index)) return false
-            loadingChapters.add(index)
-            return true
-        }
-    }
-
-    private fun removeLoading(index: Int) {
-        synchronized(this) {
-            loadingChapters.remove(index)
         }
     }
 
@@ -298,7 +276,6 @@ object ReadBook {
         Coroutine.async {
             if (chapter.chapterIndex in durChapterIndex - 1..durChapterIndex + 1) {
                 val contents = BookHelp.disposeContent(
-                    book,
                     chapter.chapterName,
                     content
                 )
