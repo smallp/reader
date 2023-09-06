@@ -1,7 +1,11 @@
 package com.novel.read.ui.main.bookshelf
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -19,19 +23,18 @@ import com.novel.read.constant.PreferKey
 import com.novel.read.data.db.entity.Book
 import com.novel.read.databinding.DialogBookshelfConfigBinding
 import com.novel.read.databinding.FragmentBookShelfBinding
-import com.novel.read.help.AppConfig
 import com.novel.read.help.IntentDataHelp
 import com.novel.read.lib.ATH
 import com.novel.read.lib.dialogs.alert
 import com.novel.read.lib.dialogs.noButton
 import com.novel.read.lib.dialogs.okButton
-import com.novel.read.ui.info.BookInfoActivity
 import com.novel.read.ui.main.bookshelf.arrange.ArrangeBookActivity
 import com.novel.read.ui.read.ReadBookActivity
 import com.novel.read.utils.BooksDiffCallBack
 import com.novel.read.utils.ext.*
 import com.novel.read.utils.viewbindingdelegate.viewBinding
 import org.jetbrains.anko.startActivity
+
 
 class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_shelf), BaseBookAdapter.CallBack  {
 
@@ -47,7 +50,6 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
         upRecyclerData()
     }
 
-
     override fun onCompatCreateOptionsMenu(menu: Menu) {
         menuInflater.inflate(R.menu.main_bookshelf, menu)
     }
@@ -55,13 +57,7 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
     override fun onCompatOptionsItemSelected(item: MenuItem) {
         super.onCompatOptionsItemSelected(item)
         when (item.itemId) {
-            R.id.menu_update_toc -> {
-//                val group = bookGroups[tab_layout.selectedTabPosition]
-//                val fragment = fragmentMap[group.groupId]
-//                fragment?.getBooks()?.let {
-//                    activityViewModel.upToc(it)
-//                }
-            }
+            R.id.menu_add -> addBook()
             R.id.menu_bookshelf_layout -> configBookshelf()
             R.id.menu_arrange_bookshelf -> startActivity<ArrangeBookActivity>()
         }
@@ -95,12 +91,6 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
             )
 //            ProcessLifecycleOwner.get().lifecycle.addObserver(App.ApplicationObserverInRead())
         }
-
-        booksAdapter.setOnItemLongClickListener { adapter, view, position ->
-            selectBook = adapter.data[position] as Book
-            activity?.let { BookInfoActivity.actionBookInfo(it, selectBook.bookId, selectBook.bookTypeId) }
-            true
-        }
     }
 
 
@@ -122,11 +112,45 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
 
     }
 
-    fun gotoTop() {
-        if (AppConfig.isEInkMode) {
-            binding.rlvBookShelf.scrollToPosition(0)
-        } else {
-            binding.rlvBookShelf.smoothScrollToPosition(0)
+    fun addBook() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "text/plain"
+            //putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
+        }
+
+        startActivityForResult(intent, 100)
+    }
+
+    @SuppressLint("Range")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
+            data?.data?.also { uri ->
+                val contentResolver = requireActivity().applicationContext.contentResolver
+
+                val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                // Check for the freshest data.
+                contentResolver.takePersistableUriPermission(uri, takeFlags)
+                val cursor: Cursor? = contentResolver.query(
+                    uri, null, null, null, null, null
+                )
+
+                cursor?.use {
+                    // moveToFirst() returns false if the cursor has 0 rows. Very handy for
+                    // "if there's anything to look at, look at it" conditionals.
+                    if (it.moveToFirst()) {
+
+                        // Note it's called "Display Name". This is
+                        // provider-specific, and might not necessarily be the file name.
+                        val displayName: String =
+                            it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                        val sizeIndex: Int = it.getColumnIndex(OpenableColumns.SIZE)
+                        Log.d("small", "$displayName ${sizeIndex}")
+                    }
+                }
+
+            }
         }
     }
 

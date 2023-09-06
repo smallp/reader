@@ -132,9 +132,6 @@
     <string name="alouding_disable">全文朗讀中不能朗讀選中文字</string>
 
     <string name="book_word">%d萬字</string>
-    <string name="man_channel">男生類</string>
-    <string name="woman_channel">女生類</string>
-    <string name="other_channel">其他類</string>
     <string name="similar_recommend">同類推薦</string>
 
     <string name="book_detail">圖書詳情</string>
@@ -207,8 +204,6 @@
 
     <!--version-->
     <string name="new_version">新版本V %s</string>
-    <string name="download_loading">%d/%d</string>
-    <string name="downloading">正在下載</string>
     <string name="update_now">立即更新</string>
 
     <string name="jump_ad">跳過</string>

@@ -1,7 +1,6 @@
 package com.novel.read.ui.main.bookshelf.arrange
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.novel.read.base.BaseBindingAdapter
 import com.novel.read.base.VBViewHolder
@@ -18,10 +17,6 @@ class ArrangeBookAdapter(val callBack: CallBack) :
         holder.itemView.backgroundColor = context.backgroundColor
         holder.vb.run {
             tvName.text = item.bookName
-            tvAuthor.text = item.authorPenname
-            tvAuthor.visibility = if (item.authorPenname.isEmpty()) View.GONE else View.VISIBLE
-//            checkbox.isChecked = selectedBooks.contains(item)
-            ivBook.load(item.coverImageUrl, item.bookName, item.authorPenname)
             tvDelete.onClick {
                 getItem(holder.layoutPosition).let {
                     callBack.deleteBook(it)

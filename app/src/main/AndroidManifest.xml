@@ -5,8 +5,6 @@
     <uses-permission
         android:name="android.permission.MANAGE_DOCUMENTS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
@@ -14,7 +12,7 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
-        android:name="com.novel.read.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/icon_read_book"
         android:label="@string/app_name"
@@ -24,11 +22,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name="com.novel.read.ui.about.AboutActivity" />
-        <activity android:name="com.novel.read.ui.theme.ThemeActivity" />
-        <activity android:name="com.novel.read.ui.record.ReadRecordActivity" />
+        <activity android:name=".ui.about.AboutActivity" />
+        <activity android:name=".ui.theme.ThemeActivity" />
+        <activity android:name=".ui.record.ReadRecordActivity" />
         <activity
-            android:name="com.novel.read.ui.welcome.WelcomeActivity"
+            android:name=".ui.welcome.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,25 +39,24 @@
                 android:launchMode="singleTask"
                 android:resource="@xml/shortcuts" />
         </activity>
-        <activity android:name="com.novel.read.ui.setting.SettingActivity" />
-        <activity android:name="com.novel.read.ui.info.BookInfoActivity" />
+        <activity android:name=".ui.setting.SettingActivity" />
         <activity
-            android:name="com.novel.read.ui.read.ReadBookActivity"
+            android:name=".ui.read.ReadBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
         <activity
-            android:name="com.novel.read.ui.chapter.ChapterListActivity"
+            android:name=".ui.chapter.ChapterListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="behind" />
         <activity
-            android:name="com.novel.read.ui.MainActivity"
+            android:name=".ui.MainActivity"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleTask" />
         <activity
-            android:name="com.novel.read.ui.main.bookshelf.arrange.ArrangeBookActivity"
+            android:name=".ui.main.bookshelf.arrange.ArrangeBookActivity"
             android:launchMode="singleTask" />
 
-        <service android:name="com.novel.read.service.TTSReadAloudService" />
+        <service android:name=".service.TTSReadAloudService" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

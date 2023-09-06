@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.text.TextUtils.isEmpty
 import com.novel.read.App
 import com.novel.read.constant.PreferKey
-import com.novel.read.help.AppConfig
 import com.novel.read.utils.ext.getPrefInt
 import com.novel.read.utils.ext.getPrefLong
-import com.spreada.utils.chinese.ZHConverter
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -338,16 +336,6 @@ object StringUtils {
     }
 
     fun convertCC(input: String?): String {
-        return when (AppConfig.chineseConverterType) {
-            1 -> {
-                ZHConverter.getInstance(ZHConverter.SIMPLIFIED).convert(input)
-            }
-            2 -> {
-                ZHConverter.getInstance(ZHConverter.TRADITIONAL).convert(input)
-            }
-            else -> {
-                input!!
-            }
-        }
+        return input!!
     }
 }

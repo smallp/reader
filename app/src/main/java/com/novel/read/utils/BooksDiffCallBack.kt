@@ -1,6 +1,5 @@
 package com.novel.read.utils
 
-import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.DiffUtil
 import com.novel.read.data.db.entity.Book
@@ -14,10 +13,10 @@ class BooksDiffCallBack : DiffUtil.ItemCallback<Book>() {
      * @return
      */
     override fun areItemsTheSame(
-        @NonNull oldItem: Book,
-        @NonNull newItem: Book
+        oldItem: Book,
+        newItem: Book
     ): Boolean {
-        return oldItem.bookId === newItem.bookId
+        return oldItem.bookId == newItem.bookId
     }
 
     /**
@@ -28,11 +27,10 @@ class BooksDiffCallBack : DiffUtil.ItemCallback<Book>() {
      * @return
      */
     override fun areContentsTheSame(
-        @NonNull oldItem: Book,
-        @NonNull newItem: Book
+        oldItem: Book,
+        newItem: Book
     ): Boolean {
         return (oldItem.bookName.equals(newItem.bookName)
-                && oldItem.introduction.equals(newItem.introduction)
                 && oldItem.lastUpdateChapterDate.equals(newItem.lastUpdateChapterDate))
     }
 
@@ -46,24 +44,15 @@ class BooksDiffCallBack : DiffUtil.ItemCallback<Book>() {
      * @return Payload info. if return null, the entire item will be refreshed.
      */
     override fun getChangePayload(
-        @NonNull oldItem: Book,
-        @NonNull newItem: Book
+        oldItem: Book,
+        newItem: Book
     ): Any? {
         val bundle = bundleOf()
         if (oldItem.bookName != newItem.bookName) {
             bundle.putString("name", newItem.bookName)
         }
-        if (oldItem.authorPenname != newItem.authorPenname) {
-            bundle.putString("author", newItem.authorPenname)
-        }
         if (oldItem.durChapterTitle != newItem.durChapterTitle) {
             bundle.putString("dur", newItem.durChapterTitle)
-        }
-//        if (oldItem.latestChapterTitle != newItem.latestChapterTitle) {
-//            bundle.putString("last", newItem.latestChapterTitle)
-//        }
-        if (oldItem.coverImageUrl != newItem.coverImageUrl) {
-            bundle.putString("cover", newItem.coverImageUrl)
         }
         if (oldItem.lastUpdateChapterDate != newItem.lastUpdateChapterDate
             || oldItem.durChapterTime != newItem.durChapterTime

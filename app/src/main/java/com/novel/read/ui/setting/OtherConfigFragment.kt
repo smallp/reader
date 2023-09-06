@@ -3,14 +3,12 @@ package com.novel.read.ui.setting
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import androidx.preference.Preference
 import com.novel.read.App
 import com.novel.read.R
 import com.novel.read.base.BasePreferenceFragment
 import com.novel.read.constant.EventBus
 import com.novel.read.constant.PreferKey
-import com.novel.read.data.model.AppUpdateResp
 import com.novel.read.help.AppConfig
 import com.novel.read.help.BookHelp
 import com.novel.read.help.coroutine.Coroutine
@@ -31,7 +29,6 @@ import kotlin.coroutines.CoroutineContext
 
 class OtherConfigFragment : BasePreferenceFragment(), CoroutineScope by MainScope(),
     SharedPreferences.OnSharedPreferenceChangeListener {
-    var appResp = MutableLiveData<AppUpdateResp>()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_config_other)

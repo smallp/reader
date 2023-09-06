@@ -13,18 +13,13 @@ class BookDao {
 
     fun update(book: Book) {
         val values = ContentValues()
-        values.put("authorPenname", book.authorPenname)
         values.put("bookName", book.bookName)
         values.put("bookStatus", book.bookStatus)
         values.put("categoryName", book.categoryName)
         values.put("channelName", book.channelName)
         values.put("cName", book.cName)
-        values.put("coverImageUrl", book.coverImageUrl)
-        values.put("introduction", book.introduction)
-        values.put("keyWord", book.keyWord)
         values.put("lastUpdateChapterDate", book.lastUpdateChapterDate)
         values.put("status", book.status)
-        values.put("wordCount", book.wordCount)
         values.put("durChapterTime", book.durChapterTime)
         values.put("durChapterIndex", book.durChapterIndex)
         values.put("durChapterPos", book.durChapterPos)

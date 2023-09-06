@@ -26,17 +26,11 @@ class BooksAdapterGrid(private val callBack: CallBack) :
         holder.getViewBinding<ItemBookshelfGridBinding>().apply{
             if (bundle == null) {
                 tvName.text = item.bookName
-                ivCover.load(item.coverImageUrl, item.bookName, item.authorPenname)
                 upRefresh(this, item)
             } else {
                 bundle.keySet().forEach {
                     when (it) {
                         "name" -> tvName.text = item.bookName
-                        "cover" -> ivCover.load(
-                            item.coverImageUrl,
-                            item.bookName,
-                            item.authorPenname
-                        )
                         "refresh" -> upRefresh(this, item)
                     }
                 }
@@ -53,7 +47,6 @@ class BooksAdapterGrid(private val callBack: CallBack) :
         }
         holder.getViewBinding<ItemBookshelfGridBinding>().apply{
             tvName.text = item.bookName
-            ivCover.load(item.coverImageUrl, item.bookName, item.authorPenname)
             upRefresh(this, item)
         }
     }
@@ -61,9 +54,7 @@ class BooksAdapterGrid(private val callBack: CallBack) :
     private fun upRefresh(holder: ItemBookshelfGridBinding, item: Book) {
         if (item.origin != BookType.local && callBack.isUpdate(item.bookId)) {
             holder.bvUnread.invisible()
-            holder.rlLoading.show()
         } else {
-            holder.rlLoading.hide()
             holder.bvUnread.setBadgeCount(0)
             holder.bvUnread.setHighlight(true)
         }

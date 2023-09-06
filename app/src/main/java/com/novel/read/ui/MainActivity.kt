@@ -26,7 +26,6 @@ import org.jetbrains.anko.toast
 
 class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
     NavigationBarView.OnItemSelectedListener,
-    NavigationBarView.OnItemReselectedListener,
     ViewPager.OnPageChangeListener by ViewPager.SimpleOnPageChangeListener() {
 
     override val viewModel: MainViewModel
@@ -36,7 +35,6 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private var bookshelfReselected: Long = 0
     private var exitTime: Long = 0
     private var pagePosition = 0
     private val fragmentMap = hashMapOf<Int, Fragment>()
@@ -51,7 +49,6 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
         bottomNavigationView.elevation =
             if (AppConfig.elevation < 0) elevation else AppConfig.elevation.toFloat()
         bottomNavigationView.setOnItemSelectedListener(this@MainActivity)
-        bottomNavigationView.setOnItemReselectedListener(this@MainActivity)
     }
 
     override fun onPageSelected(position: Int) = with(binding) {
@@ -94,19 +91,6 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
         }
         return false
     }
-
-    override fun onNavigationItemReselected(item: MenuItem) {
-        when (item.itemId) {
-            R.id.menu_bookshelf -> {
-                if (System.currentTimeMillis() - bookshelfReselected > 300) {
-                    bookshelfReselected = System.currentTimeMillis()
-                } else {
-                    (fragmentMap[0] as? BookshelfFragment)?.gotoTop()
-                }
-            }
-        }
-    }
-
 
     private inner class TabFragmentPageAdapter(fm: FragmentManager) :
         FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

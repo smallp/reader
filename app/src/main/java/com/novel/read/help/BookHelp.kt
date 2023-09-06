@@ -6,10 +6,6 @@ import com.novel.read.data.db.entity.BookChapter
 import com.novel.read.utils.FileUtils
 import com.novel.read.utils.MD5Utils
 import com.novel.read.utils.ext.*
-import com.spreada.utils.chinese.ZHConverter
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.withContext
-import org.jetbrains.anko.toast
 import java.io.File
 import java.util.regex.Pattern
 
@@ -157,22 +153,6 @@ object BookHelp {
 //                }
 //            }
 //        }
-        try {
-            when (AppConfig.chineseConverterType) {
-                1 -> {
-                    title1=ZHConverter.getInstance(ZHConverter.SIMPLIFIED).convert(title1)
-                    content1=ZHConverter.getInstance(ZHConverter.SIMPLIFIED).convert(content1)
-                }
-                2 -> {
-                    title1=ZHConverter.getInstance(ZHConverter.TRADITIONAL).convert(title1)
-                    content1=ZHConverter.getInstance(ZHConverter.TRADITIONAL).convert(content1)
-                }
-            }
-        } catch (e: Exception) {
-            withContext(Main) {
-                App.INSTANCE.toast("简繁转换出错")
-            }
-        }
         val contents = arrayListOf<String>()
         content1.split("\n").forEach {
             val str = it.replace("^[\\n\\s\\r]+".toRegex(), "")

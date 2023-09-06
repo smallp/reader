@@ -1,52 +1,28 @@
 package com.novel.read.ui.welcome
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import com.permissionx.guolindev.PermissionX
+import androidx.appcompat.app.AppCompatActivity
 import com.novel.read.R
-import com.novel.read.base.BaseActivity
-import com.novel.read.databinding.ActivityWelcomeBinding
 import com.novel.read.ui.MainActivity
 import com.novel.read.ui.read.ReadBookActivity
 import com.novel.read.utils.ext.getPrefBoolean
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 
-class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
-
-    override fun getViewBinding(): ActivityWelcomeBinding {
-        return ActivityWelcomeBinding.inflate(layoutInflater)
-    }
+class WelcomeActivity : AppCompatActivity() {
     private var flag = false
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_welcome)
         // 避免从桌面启动程序后，会重新实例化入口类的activity
         if (intent.flags and Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT != 0) {
             finish()
         } else {
-            init()
+            startMainActivity()
         }
     }
 
-    private fun init() {
-        PermissionX.init(this)
-            .permissions(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            .request { allGranted, grantedList, deniedList ->
-                if (allGranted) {
-                    binding.rootView.postDelayed({ startMainActivity() }, 2500)
-                } else {
-                    toast("权限被拒绝,将导致部分功能异常,请到设置中开启相关权限")
-                }
-            }
-
-        binding.tvSkip.setOnClickListener { startMainActivity() }
-    }
-
-    @Synchronized
     private fun startMainActivity() {
         if (!flag) {
             startActivity<MainActivity>()

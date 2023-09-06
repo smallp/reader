@@ -24,7 +24,6 @@ import com.novel.read.service.BaseReadAloudService
 import com.novel.read.service.help.ReadAloud
 import com.novel.read.service.help.ReadBook
 import com.novel.read.ui.chapter.ChapterListActivity
-import com.novel.read.ui.info.BookInfoActivity
 import com.novel.read.ui.read.config.ReadAdjustDialog
 import com.novel.read.ui.read.config.ReadAloudDialog
 import com.novel.read.ui.read.config.ReadStyleDialog
@@ -132,9 +131,6 @@ class ReadBookActivity :ReadBookBaseActivity(),
             }
             R.id.menu_page_anim -> showPageAnimConfig {
                 binding.pageView.upPageAnim()
-            }
-            R.id.menu_book_info -> ReadBook.book?.let {
-                BookInfoActivity.actionBookInfo(this, it.bookId, it.bookTypeId)
             }
         }
         return super.onCompatOptionsItemSelected(item)

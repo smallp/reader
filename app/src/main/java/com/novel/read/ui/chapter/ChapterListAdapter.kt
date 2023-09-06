@@ -8,7 +8,9 @@ import com.novel.read.base.VBViewHolder
 import com.novel.read.data.db.entity.BookChapter
 import com.novel.read.databinding.ItemChapterListBinding
 import com.novel.read.help.BookHelp
-import com.novel.read.utils.ext.*
+import com.novel.read.utils.ext.accentColor
+import com.novel.read.utils.ext.getCompatColor
+import com.novel.read.utils.ext.visible
 
 class ChapterListAdapter(val callback: Callback) :
     BaseBindingAdapter<BookChapter, ItemChapterListBinding>() {
@@ -28,10 +30,6 @@ class ChapterListAdapter(val callback: Callback) :
                 tvChapterName.setTextColor(context.getCompatColor(R.color.primaryText))
             }
             tvChapterName.text = item.chapterName
-            if (!item.updateDate.isNullOrEmpty()) {
-                tvTag.text = item.updateDate
-                tvTag.visible()
-            }
             upHasCache(this, isDur, cached)
 
         }

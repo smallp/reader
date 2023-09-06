@@ -134,9 +134,6 @@
     <string name="alouding_disable">The selected text cannot be spoken in full text speech</string>
 
     <string name="book_word">%d萬字</string>
-    <string name="man_channel">Boys</string>
-    <string name="woman_channel">Girls</string>
-    <string name="other_channel">Other categories</string>
     <string name="similar_recommend">Similar recommendation</string>
 
     <string name="book_detail">Book details</string>
@@ -210,8 +207,6 @@
 
     <!--version-->
     <string name="new_version">新版本V %s</string>
-    <string name="download_loading">%d/%d</string>
-    <string name="downloading">正在下載</string>
     <string name="update_now">立即更新</string>
 
     <string name="jump_ad">Skip</string>
@@ -237,4 +232,5 @@
     <string name="user_login">User login</string>
     <string name="privacy">Terms of service</string>
     <string name="my_order">My Order</string>
+    <string name="add_local">add local book</string>
 </resources>
