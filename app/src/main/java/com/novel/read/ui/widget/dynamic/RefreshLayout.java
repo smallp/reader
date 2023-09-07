@@ -13,9 +13,6 @@ import android.widget.FrameLayout;
 import com.novel.read.R;
 
 public class RefreshLayout extends FrameLayout {
-
-    private static final String TAG = "RefreshLayout";
-
     protected static final int STATUS_LOADING = 0;
     protected static final int STATUS_FINISH = 1;
     protected static final int STATUS_ERROR = 2;
@@ -24,7 +21,6 @@ public class RefreshLayout extends FrameLayout {
     private Context mContext;
 
     private int mEmptyViewId;
-    private int mErrorViewId;
     private int mLoadingViewId;
 
     private View mEmptyView;
@@ -53,7 +49,6 @@ public class RefreshLayout extends FrameLayout {
     private void initAttrs(AttributeSet attrs) {
         TypedArray typedArray = mContext.obtainStyledAttributes(attrs, R.styleable.RefreshLayout);
         mEmptyViewId = typedArray.getResourceId(R.styleable.RefreshLayout_layout_refresh_empty, R.layout.view_empty);
-        mErrorViewId = typedArray.getResourceId(R.styleable.RefreshLayout_layout_refresh_error, R.layout.view_net_error);
         mLoadingViewId = typedArray.getResourceId(R.styleable.RefreshLayout_layout_refresh_loading, R.layout.view_loading);
 
         typedArray.recycle();
@@ -63,7 +58,6 @@ public class RefreshLayout extends FrameLayout {
 
         //添加在empty、error、loading 情况下的布局
         mEmptyView = inflateView(mEmptyViewId);
-        mErrorView = inflateView(mErrorViewId);
         mLoadingView = inflateView(mLoadingViewId);
 
         addView(mEmptyView);
@@ -131,30 +125,6 @@ public class RefreshLayout extends FrameLayout {
         super.addView(child, index, params);
     }
 
-    public void showLoading() {
-        if (mStatus != STATUS_LOADING) {
-            toggleStatus(STATUS_LOADING);
-        }
-    }
-
-    public void showFinish() {
-        if (mStatus == STATUS_LOADING) {
-            toggleStatus(STATUS_FINISH);
-        }
-    }
-
-    public void showError() {
-        if (mStatus != STATUS_ERROR) {
-            toggleStatus(STATUS_ERROR);
-        }
-    }
-
-    public void showEmpty() {
-        if (mStatus != STATUS_EMPTY) {
-            toggleStatus(STATUS_EMPTY);
-        }
-    }
-
     //视图根据状态切换
     private void toggleStatus(int status) {
         switch (status) {
@@ -192,10 +162,6 @@ public class RefreshLayout extends FrameLayout {
                 break;
         }
         mStatus = status;
-    }
-
-    public void setOnReloadingListener(OnReloadingListener listener) {
-        mListener = listener;
     }
 
     private View inflateView(int id) {

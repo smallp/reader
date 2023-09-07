@@ -40,11 +40,7 @@ abstract class BaseActivity<VB : ViewBinding>(
 
     val isInMultiWindow: Boolean
         get() {
-            return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                isInMultiWindowMode
-            } else {
-                false
-            }
+            return isInMultiWindowMode
         }
 
     override fun attachBaseContext(newBase: Context) {
@@ -71,10 +67,8 @@ abstract class BaseActivity<VB : ViewBinding>(
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupSystemBar()
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            findViewById<TitleBar>(R.id.title_bar)
-                ?.onMultiWindowModeChanged(isInMultiWindowMode, fullScreen)
-        }
+        findViewById<TitleBar>(R.id.title_bar)
+            ?.onMultiWindowModeChanged(isInMultiWindowMode, fullScreen)
         onActivityCreated(savedInstanceState)
         observeLiveBus()
     }
