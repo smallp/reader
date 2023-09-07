@@ -6,20 +6,14 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.text.TextPaint
 import android.util.AttributeSet
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.novel.read.App
 import com.novel.read.R
 import com.novel.read.constant.PreferKey
-import com.novel.read.help.ImageLoader
 import com.novel.read.utils.ext.getPrefString
 
 /**
  * 封面
  */
-@Suppress("unused")
 class CoverImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
@@ -108,58 +102,6 @@ class CoverImageView @JvmOverloads constructor(
             authorPaint.style = Paint.Style.FILL
             canvas.drawText(it, width / 2, authorHeight, authorPaint)
         }
-    }
-
-    fun setHeight(height: Int) {
-        val width = height * 5 / 7
-        minimumWidth = width
-    }
-
-    private fun setText(name: String?, author: String?) {
-        this.name =
-            when {
-                name == null -> null
-                name.length > 5 -> name.substring(0, 4) + "…"
-                else -> name
-            }
-        this.author =
-            when {
-                author == null -> null
-                author.length > 8 -> author.substring(0, 7) + "…"
-                else -> author
-            }
-    }
-
-    fun load(path: String?, name: String?, author: String?) {
-        setText(name, author)
-        ImageLoader.load(context, path)//Glide自动识别http://,content://和file://
-            .placeholder(defaultDrawable)
-            .error(defaultDrawable)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    loadFailed = true
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    loadFailed = false
-                    return false
-                }
-
-            })
-            .centerCrop()
-            .into(this)
     }
 
     companion object {

@@ -7,10 +7,8 @@ import com.novel.read.base.BaseBindingAdapter
 import com.novel.read.base.VBViewHolder
 import com.novel.read.data.db.entity.BookChapter
 import com.novel.read.databinding.ItemChapterListBinding
-import com.novel.read.help.BookHelp
 import com.novel.read.utils.ext.accentColor
 import com.novel.read.utils.ext.getCompatColor
-import com.novel.read.utils.ext.visible
 
 class ChapterListAdapter(val callback: Callback) :
     BaseBindingAdapter<BookChapter, ItemChapterListBinding>() {
@@ -22,15 +20,12 @@ class ChapterListAdapter(val callback: Callback) :
 
         holder.vb.run {
             val isDur = callback.durChapterIndex() == item.chapterIndex
-            val cached = callback.isLocalBook
-                    || cacheFileNames.contains(BookHelp.formatChapterName(item))
             if (isDur) {
                 tvChapterName.setTextColor(context.accentColor)
             } else {
                 tvChapterName.setTextColor(context.getCompatColor(R.color.primaryText))
             }
             tvChapterName.text = item.chapterName
-            upHasCache(this, isDur, cached)
 
         }
 
@@ -42,16 +37,6 @@ class ChapterListAdapter(val callback: Callback) :
             }
         }
 
-    }
-
-    private fun upHasCache(itemView: ItemChapterListBinding, isDur: Boolean, cached: Boolean) = itemView.run {
-        tvChapterName.paint.isFakeBoldText = cached
-        ivChecked.setImageResource(R.drawable.ic_outline_cloud_24)
-        ivChecked.visible(!cached)
-        if (isDur) {
-            ivChecked.setImageResource(R.drawable.ic_check)
-            ivChecked.visible()
-        }
     }
 
     override fun createViewBinding(

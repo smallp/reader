@@ -14,11 +14,10 @@ import com.novel.read.data.read.TextChapter
 import com.novel.read.help.ReadBookConfig
 import com.novel.read.service.help.ReadBook
 import com.novel.read.ui.read.page.delegate.*
+import com.novel.read.ui.read.provider.ChapterProvider
 import com.novel.read.utils.ext.accentColor
 import com.novel.read.utils.ext.activity
 import com.novel.read.utils.ext.screenshot
-
-import io.legado.app.ui.book.read.page.provider.ChapterProvider
 import kotlin.math.abs
 
 class PageView(context: Context, attrs: AttributeSet) :

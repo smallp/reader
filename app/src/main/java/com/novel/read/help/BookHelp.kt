@@ -3,8 +3,6 @@ package com.novel.read.help
 import com.novel.read.App
 import com.novel.read.data.db.entity.Book
 import com.novel.read.data.db.entity.BookChapter
-import com.novel.read.utils.FileUtils
-import com.novel.read.utils.MD5Utils
 import com.novel.read.utils.StringUtils
 import com.novel.read.utils.ext.externalFilesDir
 import java.io.File
@@ -13,19 +11,7 @@ import java.nio.charset.Charset
 import java.util.regex.Pattern
 
 object BookHelp {
-    private const val cacheFolderName = "book_cache"
     private val downloadDir: File = App.INSTANCE.externalFilesDir
-    fun formatChapterName(bookChapter: BookChapter): String {
-        return String.format(
-            "%05d-%s.nb",
-            bookChapter.chapterId,
-            MD5Utils.md5Encode16(bookChapter.chapterName)
-        )
-    }
-
-    fun getChapterFiles(book: Book): List<String> {
-        return emptyList()
-    }
 
     fun getContent(book: Book, bookChapter: BookChapter): String? {
         val target = File(
@@ -36,22 +22,16 @@ object BookHelp {
         r.seek(bookChapter.from)
         val res = ByteArray((bookChapter.to - bookChapter.from).toInt())
         r.read(res)
-        return res.toString(Charset.forName("utf8"))
+        return res.toString(Charset.forName("utf8")).trim()
     }
 
-    fun delContent(book: Book, bookChapter: BookChapter) {
-        if (book.isLocalBook()) {
-            return
-        } else {
-            FileUtils.createFileIfNotExist(
-                downloadDir,
-                cacheFolderName,
-                book.getFolderName(),
-                formatChapterName(bookChapter)
-            ).delete()
-        }
+    fun delBook(book: Book) {
+        val target = File(
+            downloadDir,
+            book.originName
+        )
+        target.delete()
     }
-
 
     private val chapterNamePattern by lazy {
         listOf(

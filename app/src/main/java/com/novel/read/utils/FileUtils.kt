@@ -519,14 +519,6 @@ object FileUtils {
     }
 
     /**
-     * 获取格式化后的文件大小
-     */
-    fun getSize(path: String): String {
-        val fileSize = getLength(path)
-        return ConvertUtils.toFileSizeString(fileSize)
-    }
-
-    /**
      * 获取文件后缀,不包括“.”
      */
     fun getExtension(pathOrUrl: String): String {

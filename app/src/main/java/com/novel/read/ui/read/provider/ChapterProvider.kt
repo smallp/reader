@@ -1,4 +1,4 @@
-package io.legado.app.ui.book.read.page.provider
+package com.novel.read.ui.read.provider
 
 import android.graphics.Typeface
 import android.net.Uri
@@ -7,17 +7,12 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import com.novel.read.App
-import com.novel.read.constant.AppPattern
-import com.novel.read.data.db.entity.Book
 import com.novel.read.data.db.entity.BookChapter
 import com.novel.read.data.read.TextChapter
-import com.novel.read.data.read.TextChar
 import com.novel.read.data.read.TextLine
 import com.novel.read.data.read.TextPage
 import com.novel.read.help.AppConfig
 import com.novel.read.help.ReadBookConfig
-import com.novel.read.ui.read.provider.ImageProvider
-import com.novel.read.utils.NetworkUtils
 import com.novel.read.utils.RealPathUtil
 import com.novel.read.utils.ext.*
 import java.util.*
@@ -49,11 +44,9 @@ object ChapterProvider {
      * 获取拆分完的章节数据
      */
     fun getTextChapter(
-        book: Book,
         bookChapter: BookChapter,
         contents: List<String>,
         chapterSize: Int,
-        imageStyle: String?,
     ): TextChapter {
         val textPages = arrayListOf<TextPage>()
         val pageLines = arrayListOf<Int>()
@@ -62,27 +55,13 @@ object ChapterProvider {
         var durY = 0f
         textPages.add(TextPage())
         contents.forEachIndexed { index, text ->
-            val matcher = AppPattern.imgPattern.matcher(text)
-            if (matcher.find()) {
-                var src = matcher.group(1)
-//                if (!book.isEpub()) {
-                    src = NetworkUtils.getAbsoluteURL("", src)
-//                }
-                src?.let {
-                    durY =
-                        setTypeImage(
-                            book, bookChapter, src, durY, textPages, imageStyle
-                        )
-                }
-            } else {
-                val isTitle = index == 0
-                if (!(isTitle && ReadBookConfig.titleMode == 2)) {
-                    durY =
-                        setTypeText(
-                            text, durY, textPages, pageLines,
-                            pageLengths, stringBuilder, isTitle
-                        )
-                }
+            val isTitle = index == 0
+            if (!(isTitle && ReadBookConfig.titleMode == 2)) {
+                durY =
+                    setTypeText(
+                        text, durY, textPages, pageLines,
+                        pageLengths, stringBuilder, isTitle
+                    )
             }
         }
         textPages.last().height = durY + 20.dp
@@ -111,70 +90,6 @@ object ChapterProvider {
             pageLengths,
             chapterSize
         )
-    }
-
-    private fun setTypeImage(
-        book: Book,
-        chapter: BookChapter,
-        src: String,
-        y: Float,
-        textPages: ArrayList<TextPage>,
-        imageStyle: String?,
-    ): Float {
-        var durY = y
-        ImageProvider.getImage(book, chapter.chapterId.toInt(), src)?.let {
-            if (durY > visibleHeight) {
-                textPages.last().height = durY
-                textPages.add(TextPage())
-                durY = 0f
-            }
-            var height = it.height
-            var width = it.width
-            when (imageStyle?.toUpperCase(Locale.ROOT)) {
-                "FULL" -> {
-                    width = visibleWidth
-                    height = it.height * visibleWidth / it.width
-                }
-                else -> {
-                    if (it.width > visibleWidth) {
-                        height = it.height * visibleWidth / it.width
-                        width = visibleWidth
-                    }
-                    if (height > visibleHeight) {
-                        width = width * visibleHeight / height
-                        height = visibleHeight
-                    }
-                    if (durY + height > visibleHeight) {
-                        textPages.last().height = durY
-                        textPages.add(TextPage())
-                        durY = 0f
-                    }
-                }
-            }
-            val textLine = TextLine(isImage = true)
-            textLine.lineTop = durY
-            durY += height
-            textLine.lineBottom = durY
-            val (start, end) = if (visibleWidth > width) {
-                val adjustWidth = (visibleWidth - width) / 2f
-                Pair(
-                    paddingLeft.toFloat() + adjustWidth,
-                    paddingLeft.toFloat() + adjustWidth + width
-                )
-            } else {
-                Pair(paddingLeft.toFloat(), (paddingLeft + width).toFloat())
-            }
-            textLine.textChars.add(
-                TextChar(
-                    charData = src,
-                    start = start,
-                    end = end,
-                    isImage = true
-                )
-            )
-            textPages.last().textLines.add(textLine)
-        }
-        return durY + paragraphSpacing / 10f
     }
 
     /**

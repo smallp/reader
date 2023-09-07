@@ -12,8 +12,8 @@ import com.novel.read.help.IntentDataHelp
 import com.novel.read.help.ReadBookConfig
 import com.novel.read.help.coroutine.Coroutine
 import com.novel.read.service.BaseReadAloudService
+import com.novel.read.ui.read.provider.ChapterProvider
 import com.novel.read.ui.read.provider.ImageProvider
-import io.legado.app.ui.book.read.page.provider.ChapterProvider
 import org.jetbrains.anko.getStackTraceString
 import org.jetbrains.anko.toast
 
@@ -283,11 +283,9 @@ object ReadBook {
                     durChapterIndex -> {
                         curTextChapter =
                             ChapterProvider.getTextChapter(
-                                book,
                                 chapter,
                                 contents,
-                                chapterSize,
-                                ""
+                                chapterSize
                             )
                         if (upContent) callBack?.upContent(resetPageOffset = resetPageOffset)
                         callBack?.upView()
@@ -298,22 +296,18 @@ object ReadBook {
                     durChapterIndex - 1 -> {
                         prevTextChapter =
                             ChapterProvider.getTextChapter(
-                                book,
                                 chapter,
                                 contents,
-                                chapterSize,
-                                ""
+                                chapterSize
                             )
                         if (upContent) callBack?.upContent(-1, resetPageOffset)
                     }
                     durChapterIndex + 1 -> {
                         nextTextChapter =
                             ChapterProvider.getTextChapter(
-                                book,
                                 chapter,
                                 contents,
-                                chapterSize,
-                                ""
+                                chapterSize
                             )
                         if (upContent) callBack?.upContent(1, resetPageOffset)
                     }

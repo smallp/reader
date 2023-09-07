@@ -2,12 +2,9 @@ package com.novel.read.ui.read
 
 import android.app.Application
 import android.content.Intent
-import android.util.Log
 import com.novel.read.App
 import com.novel.read.base.BaseViewModel
 import com.novel.read.data.db.entity.Book
-import com.novel.read.data.db.entity.BookChapter
-import com.novel.read.help.BookHelp
 import com.novel.read.help.IntentDataHelp
 import com.novel.read.service.BaseReadAloudService
 import com.novel.read.service.help.ReadAloud
@@ -41,14 +38,10 @@ class ReadBookViewModel(application: Application) : BaseViewModel(application) {
             ReadBook.resetData(book)
             isInitFinish = true
             ReadBook.chapterSize = App.db.getChapterDao().getChapterCount(book.bookId)
-            if (ReadBook.chapterSize == 0 || !ReadBook.inBookshelf) {
-                loadChapterList(book)
-            } else {
-                if (ReadBook.durChapterIndex > ReadBook.chapterSize - 1) {
-                    ReadBook.durChapterIndex = ReadBook.chapterSize - 1
-                }
-                ReadBook.loadContent(resetPageOffset = true)
+            if (ReadBook.durChapterIndex > ReadBook.chapterSize - 1) {
+                ReadBook.durChapterIndex = ReadBook.chapterSize - 1
             }
+            ReadBook.loadContent(resetPageOffset = true)
         } else {
             ReadBook.book = book
             if (ReadBook.durChapterIndex != book.durChapterIndex) {
@@ -61,43 +54,13 @@ class ReadBookViewModel(application: Application) : BaseViewModel(application) {
             ReadBook.titleDate.postValue(book.bookName)
             isInitFinish = true
             ReadBook.chapterSize = App.db.getChapterDao().getChapterCount(book.bookId)
-            if (ReadBook.chapterSize == 0 || !ReadBook.inBookshelf) {
-                loadChapterList(book)
+            if (ReadBook.curTextChapter != null) {
+                ReadBook.callBack?.upContent(resetPageOffset = false)
             } else {
-                if (ReadBook.curTextChapter != null) {
-                    ReadBook.callBack?.upContent(resetPageOffset = false)
-                } else {
-                    ReadBook.loadContent(resetPageOffset = true)
-                }
+                ReadBook.loadContent(resetPageOffset = true)
             }
         }
     }
-
-    fun loadChapterList(
-        book: Book,
-        changeDruChapterIndex: ((chapters: List<BookChapter>) -> Unit)? = null
-    ) {
-        Log.e("loadChapterList", "loadChapterList: ")
-        if (book.isLocalBook()) {
-            execute {
-//                LocalBook.getChapterList(book).let {
-//                    App.db.getChapterDao().delByBook(book.bookId)
-//                    App.db.getChapterDao().insert(*it.toTypedArray())
-//                    App.db.getBookDao().update(book)
-//                    ReadBook.chapterSize = it.size
-//                    if (it.isEmpty()) {
-//                        ReadBook.upMsg(context.getString(R.string.error_load_toc))
-//                    } else {
-//                        ReadBook.upMsg(null)
-//                        ReadBook.loadContent(resetPageOffset = true)
-//                    }
-//                }
-            }.onError {
-                ReadBook.upMsg("LoadTocError:${it.localizedMessage}")
-            }
-        }
-    }
-
 
     fun openChapter(index: Int, pageIndex: Int = 0) {
         ReadBook.prevTextChapter = null
@@ -117,17 +80,6 @@ class ReadBookViewModel(application: Application) : BaseViewModel(application) {
             ReadBook.book?.delete()
         }.onSuccess {
             success?.invoke()
-        }
-    }
-
-
-    fun refreshContent(book: Book) {
-        execute {
-            App.db.getChapterDao().getChapter(book.bookId, ReadBook.durChapterIndex)
-                ?.let { chapter ->
-                    BookHelp.delContent(book, chapter)
-                    ReadBook.loadContent(ReadBook.durChapterIndex, resetPageOffset = false)
-                }
         }
     }
 

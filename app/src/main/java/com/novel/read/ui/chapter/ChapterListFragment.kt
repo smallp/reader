@@ -10,19 +10,14 @@ import androidx.lifecycle.observe
 import com.novel.read.App
 import com.novel.read.R
 import com.novel.read.base.VMBaseFragment
-import com.novel.read.constant.EventBus
-import com.novel.read.data.db.entity.Book
 import com.novel.read.data.db.entity.BookChapter
 import com.novel.read.databinding.FragmentChapterListBinding
-import com.novel.read.help.BookHelp
 import com.novel.read.ui.widget.UpLinearLayoutManager
 import com.novel.read.ui.widget.VerticalDivider
 import com.novel.read.utils.ColorUtils
 import com.novel.read.utils.ext.*
 import com.novel.read.utils.viewbindingdelegate.viewBinding
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.anko.sdk27.listeners.onClick
 
 class ChapterListFragment : VMBaseFragment<ChapterListViewModel>(R.layout.fragment_chapter_list),
@@ -81,7 +76,6 @@ class ChapterListFragment : VMBaseFragment<ChapterListViewModel>(R.layout.fragme
                 durChapterIndex = it.durChapterIndex
                 binding.tvCurrentChapterInfo.text =
                     "${it.durChapterTitle}(${it.durChapterIndex + 1}/${tocLiveData?.value?.size})"
-                initCacheFileNames(it)
             }
         }
     }
@@ -94,26 +88,6 @@ class ChapterListFragment : VMBaseFragment<ChapterListViewModel>(R.layout.fragme
             if (!scrollToDurChapter) {
                 mLayoutManager.scrollToPositionWithOffset(durChapterIndex, 0)
                 scrollToDurChapter = true
-            }
-        }
-    }
-
-    private fun initCacheFileNames(book: Book) {
-        launch(Dispatchers.IO) {
-            adapter.cacheFileNames.addAll(BookHelp.getChapterFiles(book))
-            withContext(Dispatchers.Main) {
-                adapter.notifyItemRangeChanged(0, adapter.itemCount, true)
-            }
-        }
-    }
-
-    override fun observeLiveBus() {
-        observeEvent<BookChapter>(EventBus.SAVE_CONTENT) { chapter ->
-            viewModel.book?.bookId?.let { bookId ->
-                if (chapter.bookId == bookId) {
-                    adapter.cacheFileNames.add(BookHelp.formatChapterName(chapter))
-                    adapter.notifyItemChanged(chapter.chapterIndex, true)
-                }
             }
         }
     }

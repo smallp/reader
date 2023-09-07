@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import com.novel.read.ui.read.page.PageView
-import io.legado.app.ui.book.read.page.provider.ChapterProvider
+import com.novel.read.ui.read.provider.ChapterProvider
 
 class ScrollPageDelegate(pageView: PageView) : PageDelegate(pageView) {
 

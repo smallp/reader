@@ -14,13 +14,13 @@ import com.novel.read.data.read.TextLine
 import com.novel.read.data.read.TextPage
 import com.novel.read.help.ReadBookConfig
 import com.novel.read.service.help.ReadBook
+import com.novel.read.ui.read.provider.ChapterProvider
 import com.novel.read.ui.read.provider.ImageProvider
 import com.novel.read.ui.widget.dialog.PhotoDialog
 import com.novel.read.utils.ext.accentColor
 import com.novel.read.utils.ext.activity
 import com.novel.read.utils.ext.getCompatColor
 import com.novel.read.utils.ext.getPrefBoolean
-import io.legado.app.ui.book.read.page.provider.ChapterProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlin.math.min
 

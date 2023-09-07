@@ -16,8 +16,6 @@
         android:theme="@style/AppTheme.Light"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <activity android:name=".ui.about.AboutActivity" />
-        <activity android:name=".ui.theme.ThemeActivity" />
-        <activity android:name=".ui.record.ReadRecordActivity" />
         <activity
             android:name=".ui.welcome.WelcomeActivity"
             android:exported="true">

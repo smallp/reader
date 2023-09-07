@@ -191,7 +191,6 @@ class ReadBookActivity :ReadBookBaseActivity(),
 
     override fun loadChapterList(book: Book) {
         ReadBook.upMsg(getString(R.string.toc_updateing))
-        viewModel.loadChapterList(book)
     }
 
     override fun upContent(relativePosition: Int, resetPageOffset: Boolean) {

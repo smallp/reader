@@ -15,10 +15,9 @@ import com.novel.read.databinding.ViewBookPageBinding
 import com.novel.read.help.ReadBookConfig
 import com.novel.read.help.ReadTipConfig
 import com.novel.read.service.help.ReadBook
+import com.novel.read.ui.read.provider.ChapterProvider
 import com.novel.read.ui.widget.BatteryView
 import com.novel.read.utils.ext.*
-import io.legado.app.ui.book.read.page.provider.ChapterProvider
-import org.jetbrains.anko.topPadding
 import java.util.*
 
 class ContentView(context: Context) : FrameLayout(context) {

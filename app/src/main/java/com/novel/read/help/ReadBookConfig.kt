@@ -8,11 +8,19 @@ import androidx.annotation.Keep
 import com.novel.read.App
 import com.novel.read.R
 import com.novel.read.constant.PreferKey
+import com.novel.read.help.coroutine.Coroutine
+import com.novel.read.ui.read.provider.ChapterProvider
 import com.novel.read.utils.BitmapUtils
 import com.novel.read.utils.FileUtils
-import com.novel.read.utils.ext.*
-import com.novel.read.help.coroutine.Coroutine
-import io.legado.app.ui.book.read.page.provider.ChapterProvider
+import com.novel.read.utils.ext.GSON
+import com.novel.read.utils.ext.fromJsonArray
+import com.novel.read.utils.ext.fromJsonObject
+import com.novel.read.utils.ext.getCompatColor
+import com.novel.read.utils.ext.getPrefBoolean
+import com.novel.read.utils.ext.getPrefInt
+import com.novel.read.utils.ext.hexString
+import com.novel.read.utils.ext.putPrefBoolean
+import com.novel.read.utils.ext.putPrefInt
 import java.io.File
 
 /**

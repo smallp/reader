@@ -32,8 +32,6 @@ object SystemUtils {
     }
 
     fun ignoreBatteryOptimization(activity: Activity) {
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) return
-
         val powerManager = activity.getSystemService(POWER_SERVICE) as PowerManager
         val hasIgnored = powerManager.isIgnoringBatteryOptimizations(activity.packageName)
         //  判断当前APP是否有加入电池优化的白名单，如果没有，弹出加入电池优化的白名单的设置对话框。
