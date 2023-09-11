@@ -199,7 +199,7 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
                         chapters.add(BookChapter(0, book.bookId, index, title, start, end))
                         break
                     }
-                    val first = line.trim().let { s ->
+                    val first = line.let { s ->
                         if (s.length > 1 && !s.endsWith("结束")) s[0]
                         else ""
                     }

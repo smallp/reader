@@ -36,7 +36,7 @@ object BookHelp {
     private val chapterNamePattern by lazy {
         listOf(
             Pattern.compile("^(.*?第([\\d零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟０-９\\s]+)[章节篇回集])[、，。　：:.\\s]*"),
-            Pattern.compile("^\\s*\\d+[、\\s]"),
+            Pattern.compile("^\\d+[、\\s]?"),
         )
     }
 

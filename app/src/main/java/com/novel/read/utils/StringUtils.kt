@@ -1,7 +1,6 @@
 package com.novel.read.utils
 
 import android.annotation.SuppressLint
-import android.text.TextUtils.isEmpty
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -258,18 +257,9 @@ object StringUtils {
 
     // 移除字符串首尾空字符的高效方法(利用ASCII值判断,包括全角空格)
     fun trim(s: String): String {
-        if (isEmpty(s)) return ""
-        var start = 0
-        val len = s.length
-        var end = len - 1
-        while (start < end && (s[start].code <= 0x20 || s[start] == '　')) {
-            ++start
+        return s.trim {
+            it.isWhitespace() || it == '　'
         }
-        while (start < end && (s[end].code <= 0x20 || s[end] == '　')) {
-            --end
-        }
-        if (end < len) ++end
-        return if (start > 0 || end < len) s.substring(start, end) else s
     }
 
     fun repeat(str: String, n: Int): String {
