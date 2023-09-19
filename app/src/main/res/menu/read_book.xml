@@ -13,19 +13,13 @@
         android:id="@+id/menu_copy_text"
         android:icon="@drawable/ic_copy"
         android:title="@string/copy_text"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_page_anim"
         android:icon="@drawable/ic_auto_page"
         android:title="@string/page_anim"
         android:visible="false"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/menu_book_info"
-        android:icon="@drawable/ic_toc"
-        android:title="@string/book_info"
         app:showAsAction="never" />
 
 </menu>

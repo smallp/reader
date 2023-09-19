@@ -27,7 +27,6 @@ class ChapterListFragment : VMBaseFragment<ChapterListViewModel>(R.layout.fragme
     private var durChapterIndex = 0
     private lateinit var mLayoutManager: UpLinearLayoutManager
     private var tocLiveData: MutableLiveData<List<BookChapter>>? = MutableLiveData()
-    private var scrollToDurChapter = false
 
     override val viewModel: ChapterListViewModel
         get() = getViewModelOfActivity(ChapterListViewModel::class.java)
@@ -74,6 +73,7 @@ class ChapterListFragment : VMBaseFragment<ChapterListViewModel>(R.layout.fragme
             initDoc()
             viewModel.book?.let {
                 durChapterIndex = it.durChapterIndex
+                mLayoutManager.scrollToPositionWithOffset(durChapterIndex, 0)
                 binding.tvCurrentChapterInfo.text =
                     "${it.durChapterTitle}(${it.durChapterIndex + 1}/${tocLiveData?.value?.size})"
             }
@@ -85,10 +85,6 @@ class ChapterListFragment : VMBaseFragment<ChapterListViewModel>(R.layout.fragme
         tocLiveData?.value = App.db.getChapterDao().observeByBook(viewModel.bookId)
         tocLiveData?.observe(viewLifecycleOwner) {
             adapter.setList(it)
-            if (!scrollToDurChapter) {
-                mLayoutManager.scrollToPositionWithOffset(durChapterIndex, 0)
-                scrollToDurChapter = true
-            }
         }
     }
 

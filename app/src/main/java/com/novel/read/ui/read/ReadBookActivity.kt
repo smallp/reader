@@ -10,16 +10,12 @@ import android.os.Looper
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
-import com.novel.read.BuildConfig
 import com.novel.read.R
 import com.novel.read.constant.EventBus
 import com.novel.read.constant.PreferKey
 import com.novel.read.constant.Status
 import com.novel.read.data.db.entity.Book
 import com.novel.read.data.db.entity.BookChapter
-import com.novel.read.lib.dialogs.alert
-import com.novel.read.lib.dialogs.noButton
-import com.novel.read.lib.dialogs.okButton
 import com.novel.read.service.BaseReadAloudService
 import com.novel.read.service.help.ReadAloud
 import com.novel.read.service.help.ReadBook
@@ -557,35 +553,13 @@ class ReadBookActivity :ReadBookBaseActivity(),
         binding.pageView.isTextSelected = false
     }
 
-    override fun finish() {
-        ReadBook.book?.let {
-            if (!ReadBook.inBookshelf) {
-                this.alert(title = getString(R.string.add_to_shelf)) {
-                    message = getString(R.string.check_add_bookshelf, it.bookName)
-                    okButton {
-                        ReadBook.inBookshelf = true
-                        setResult(Activity.RESULT_OK)
-                        super.finish()
-                    }
-                    noButton { viewModel.removeFromBookshelf { super.finish() } }
-                }.show().applyTint()
-            } else {
-                super.finish()
-            }
-        } ?: super.finish()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         postEvent(EventBus.UP_BOOK, 0L)
         mHandler.removeCallbacks(keepScreenRunnable)
-        textActionMenu?.dismiss()
+        textActionMenu.dismiss()
         binding.pageView.onDestroy()
         ReadBook.msg = null
-        if (!BuildConfig.DEBUG) {
-//            SyncBookProgress.uploadBookProgress()
-//            Backup.autoBack(this)
-        }
     }
 
 }

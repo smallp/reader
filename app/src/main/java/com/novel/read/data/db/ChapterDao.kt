@@ -6,7 +6,7 @@ import org.litepal.LitePal
 class ChapterDao {
 
     fun observeByBook(bookId: String): List<BookChapter>? =
-        LitePal.where("bookId=?", bookId.toString()).find(BookChapter::class.java)
+        LitePal.where("bookId=?", bookId).find(BookChapter::class.java)
 
     fun liveDataSearch(bookId: String, key: String): List<BookChapter>? =
         LitePal.where("bookId=? and chapterName like ?", bookId, "%${key}%")
