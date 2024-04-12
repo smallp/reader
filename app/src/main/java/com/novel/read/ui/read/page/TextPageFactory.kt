@@ -22,6 +22,21 @@ class TextPageFactory(dataSource: DataSource) : PageFactory<TextPage>(dataSource
         ReadBook.setPageIndex(0)
     }
 
+    fun moveTo(page: Int) = with(dataSource) {
+        currentChapter?.let {
+            if (it.pageSize == 0) {
+                ReadBook.setPageIndex(0)
+            } else {
+                ReadBook.setPageIndex(page - 1)
+            }
+        } ?: ReadBook.setPageIndex(0)
+    }
+
+    fun readRate(): Pair<Double, Int> {
+        return if (dataSource.currentChapter == null) (0.0 to 0)
+        else ((dataSource.pageIndex.toDouble() + 1) / dataSource.currentChapter!!.pageSize to dataSource.currentChapter!!.pageSize)
+    }
+
     override fun moveToLast() = with(dataSource) {
         currentChapter?.let {
             if (it.pageSize == 0) {

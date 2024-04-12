@@ -33,6 +33,7 @@ import com.novel.read.utils.ext.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.startActivityForResult
 import java.lang.Runnable
+import kotlin.math.floor
 
 class ReadBookActivity :ReadBookBaseActivity(),
     View.OnTouchListener, PageView.CallBack, TextActionMenu.CallBack, ContentTextView.CallBack,
@@ -71,15 +72,24 @@ class ReadBookActivity :ReadBookBaseActivity(),
         ReadBook.callBack = this
         ReadBook.titleDate.observe(this) {
             binding.readMenu.setTitle(it)
-            upMenu()
             upView()
         }
         viewModel.initData(intent)
     }
 
+    private var readRate: Pair<Double, Int> = 0.0 to 0
+    private var checkPage = false
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         upSystemUiVisibility()
+        if (hasFocus) {
+            if (readRate.second == 0) {
+                return
+            }
+            checkPage = true
+        } else {
+            readRate = pageFactory.readRate()
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -95,16 +105,7 @@ class ReadBookActivity :ReadBookBaseActivity(),
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         this.menu = menu
-        upMenu()
         return super.onPrepareOptionsMenu(menu)
-    }
-
-    private fun upMenu() {
-        menu?.let { menu ->
-            ReadBook.book?.let { book ->
-
-            }
-        }
     }
 
     /**
@@ -224,6 +225,12 @@ class ReadBookActivity :ReadBookBaseActivity(),
             ReadBook.readAloud()
         }
         loadStates = true
+        if (checkPage) {
+            if (pageFactory.currentPage.pageSize != readRate.second) {
+                pageFactory.moveTo(floor(pageFactory.currentPage.pageSize * readRate.first).toInt())
+            }
+            checkPage = false
+        }
     }
 
     override fun upSelectedStart(x: Float, y: Float, top: Float)  = with(binding){

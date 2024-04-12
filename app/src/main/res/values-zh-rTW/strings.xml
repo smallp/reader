@@ -228,4 +228,5 @@
     <string name="user_login">用戶登錄</string>
     <string name="privacy">服務條款</string>
     <string name="my_order">我的訂單</string>
+    <string name="volumeKeyPage">音量键翻页</string>
 </resources>

@@ -233,4 +233,5 @@
     <string name="privacy">Terms of service</string>
     <string name="my_order">My Order</string>
     <string name="add_local">add local book</string>
+    <string name="volumeKeyPage">volume key page</string>
 </resources>

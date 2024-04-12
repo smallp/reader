@@ -8,6 +8,11 @@
         android:defaultValue="auto"
         app:entries="@array/language"
         app:entryValues="@array/language_value" />
+    <CheckBoxPreference
+        android:key="volumeKeyPage"
+        android:title="@string/volumeKeyPage"
+        android:defaultValue="false"
+        app:iconSpaceReserved="false" />
 
 
     <com.novel.read.ui.widget.prefs.PreferenceCategory
@@ -20,11 +25,6 @@
             android:key="cleanCache"
             android:title="@string/clear_cache"
             android:summary="@string/clear_cache_summary"
-            app:iconSpaceReserved="false" />
-
-        <com.novel.read.ui.widget.prefs.Preference
-            android:key="check_update"
-            android:title="@string/check_update"
             app:iconSpaceReserved="false" />
 
     </com.novel.read.ui.widget.prefs.PreferenceCategory>

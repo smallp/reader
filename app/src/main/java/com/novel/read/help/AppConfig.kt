@@ -45,39 +45,11 @@ object AppConfig {
     val requestedDirection: String?
         get() = App.INSTANCE.getPrefString(R.string.pk_requested_direction)
 
-    var backupPath: String?
-        get() = App.INSTANCE.getPrefString(PreferKey.backupPath)
-        set(value) {
-            if (value.isNullOrEmpty()) {
-                App.INSTANCE.removePref(PreferKey.backupPath)
-            } else {
-                App.INSTANCE.putPrefString(PreferKey.backupPath, value)
-            }
-        }
-
-    var threadCount: Int
-        get() = App.INSTANCE.getPrefInt(PreferKey.threadCount, 16)
-        set(value) {
-            App.INSTANCE.putPrefInt(PreferKey.threadCount, value)
-        }
-
-    var importBookPath: String?
-        get() = App.INSTANCE.getPrefString("importBookPath")
-        set(value) {
-            if (value == null) {
-                App.INSTANCE.removePref("importBookPath")
-            } else {
-                App.INSTANCE.putPrefString("importBookPath", value)
-            }
-        }
-
     var ttsSpeechRate: Int
         get() = App.INSTANCE.getPrefInt(PreferKey.ttsSpeechRate, 5)
         set(value) {
             App.INSTANCE.putPrefInt(PreferKey.ttsSpeechRate, value)
         }
-
-    val clickAllNext: Boolean get() = App.INSTANCE.getPrefBoolean(PreferKey.clickAllNext, false)
 
     var chineseConverterType: Int
         get() = App.INSTANCE.getPrefInt(PreferKey.chineseConverterType,1)
@@ -101,9 +73,6 @@ object AppConfig {
         set(value) {
             App.INSTANCE.putPrefInt(PreferKey.barElevation, value)
         }
-
-    var replaceEnableDefault: Boolean =
-        App.INSTANCE.getPrefBoolean(PreferKey.replaceEnableDefault, true)
 
 
     val readBodyToLh: Boolean get() = App.INSTANCE.getPrefBoolean(PreferKey.readBodyToLh, true)
