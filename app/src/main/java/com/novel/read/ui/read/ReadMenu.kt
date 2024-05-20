@@ -21,9 +21,16 @@ import com.novel.read.service.help.ReadBook
 import com.novel.read.utils.AnimationUtilsSupport
 import com.novel.read.utils.ColorUtils
 import com.novel.read.utils.SystemUtils
-import com.novel.read.utils.ext.*
+import com.novel.read.utils.ext.activity
+import com.novel.read.utils.ext.bottomBackground
+import com.novel.read.utils.ext.dp
+import com.novel.read.utils.ext.getPrefBoolean
+import com.novel.read.utils.ext.getPrimaryTextColor
+import com.novel.read.utils.ext.gone
+import com.novel.read.utils.ext.invisible
+import com.novel.read.utils.ext.navigationBarHeight
+import com.novel.read.utils.ext.visible
 import org.jetbrains.anko.sdk27.listeners.onClick
-import org.jetbrains.anko.sdk27.listeners.onLongClick
 
 /**
  * 阅读界面菜单
@@ -144,6 +151,10 @@ class ReadMenu @JvmOverloads constructor(
             AppConfig.isNightTheme = !AppConfig.isNightTheme
             App.INSTANCE.applyDayNight()
         }
+        llReadAloud.onClick {
+            AppConfig.isNightTheme = !AppConfig.isNightTheme
+            App.INSTANCE.applyDayNight()
+        }
 
         //上一章
         tvPre.onClick { ReadBook.moveToPrevChapter(upContent = true, toLast = false) }
@@ -158,16 +169,6 @@ class ReadMenu @JvmOverloads constructor(
             }
         }
 
-        //朗读
-        llReadAloud.onClick {
-            runMenuOut {
-                callBack.onClickReadAloud()
-            }
-        }
-        llReadAloud.onLongClick {
-            runMenuOut { callBack.showReadAloudDialog() }
-            true
-        }
         //界面
         llFont.onClick {
             runMenuOut {
