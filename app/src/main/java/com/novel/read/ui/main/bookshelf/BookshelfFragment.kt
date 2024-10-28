@@ -194,13 +194,13 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
                 val chapters = ArrayList<BookChapter>()
                 val patten = BookHelp.findTitlePattern(title) ?: return@withContext
                 while (true) {
-                    val line = it.readLine()
+                    val line = it.readLine()?.trim()
                     if (line == null) {
                         chapters.add(BookChapter(0, book.bookId, index, title, start, end))
                         break
                     }
                     val first = line.let { s ->
-                        if (s.length > 1 && !s.endsWith("结束")) s[0]
+                        if (s.length > 1 && !s.endsWith(" 结束")) s[0]
                         else ""
                     }
                     if ((first == '第' || (first in '0'..'9')) && patten.matcher(line).find()) {
