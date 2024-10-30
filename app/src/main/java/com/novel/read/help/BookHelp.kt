@@ -55,7 +55,7 @@ object BookHelp {
             val str = StringUtils.trim(it)
             if (contents.isEmpty()) {
                 contents.add(title)
-                if (str != title && str.isNotEmpty()) {
+                if (str.trim() != title && str.isNotEmpty()) {
                     contents.add("${ReadBookConfig.paragraphIndent}$str")
                 }
             } else if (str.isNotEmpty()) {
