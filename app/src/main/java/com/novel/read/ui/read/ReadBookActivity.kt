@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
@@ -78,15 +79,16 @@ class ReadBookActivity :ReadBookBaseActivity(),
     }
 
     private var readRate: Pair<Double, Int> = 0.0 to 0
-    private var checkPage = false
+    private var checkPage = -1
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         upSystemUiVisibility()
         if (hasFocus) {
-            if (readRate.second == 0) {
+            if (readRate.second == 0 || checkPage!=0) {
+                checkPage=0
                 return
             }
-            checkPage = true
+            checkPage = 1
         } else {
             readRate = pageFactory.readRate()
         }
@@ -225,11 +227,11 @@ class ReadBookActivity :ReadBookBaseActivity(),
             ReadBook.readAloud()
         }
         loadStates = true
-        if (checkPage) {
+        if (checkPage==1) {
             if (pageFactory.currentPage.pageSize != readRate.second) {
                 pageFactory.moveTo(floor(pageFactory.currentPage.pageSize * readRate.first).toInt())
             }
-            checkPage = false
+            checkPage = 0
         }
     }
 
@@ -486,6 +488,7 @@ class ReadBookActivity :ReadBookBaseActivity(),
                 requestCodeChapterList ->
                     data?.getIntExtra("index", ReadBook.durChapterIndex)?.let { index ->
                         if (index != ReadBook.durChapterIndex) {
+                            checkPage = -1
                             val pageIndex = data.getIntExtra("pageIndex", 0)
                             viewModel.openChapter(index, pageIndex)
                         }
