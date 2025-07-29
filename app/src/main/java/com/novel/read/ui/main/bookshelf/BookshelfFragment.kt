@@ -199,14 +199,19 @@ class BookshelfFragment : VMBaseFragment<BookViewModel>(R.layout.fragment_book_s
                         chapters.add(BookChapter(0, book.bookId, index, title, start, end))
                         break
                     }
-                    val first = line.trim().let { s ->
+                    val realLine=line.trim()
+                    val first = realLine.let { s ->
                         if (s.length > 1 && !s.endsWith(" 结束")) s[0]
                         else ""
                     }
-                    if ((first == '第' || (first in '0'..'9')) && patten.matcher(line).find()) {
-                        chapters.add(BookChapter(0, book.bookId, index++, title.trim(), start, end))
-                        start = end
-                        title = line
+                    if ((first == '第' || (first in '0'..'9')) && patten.matcher(realLine).find() && realLine.length<=20) {
+                        if (title==realLine && start+line.toByteArray().size.toLong() + 1>=end){
+                            start = end
+                        }else{
+                            chapters.add(BookChapter(0, book.bookId, index++, title.trim(), start, end))
+                            start = end
+                            title = realLine
+                        }
                     }
                     end += line.toByteArray().size.toLong() + 1
                 }
